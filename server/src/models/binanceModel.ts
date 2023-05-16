@@ -4,12 +4,15 @@ import WebSocket from 'ws'
 import { BinanceTicker } from '../types'
 
 export class BinanceModel {
-  public symbols: any
+  public tickers: any
+  public symbols: string[]
 
   private socket: WebSocket
 
   constructor() {
-    this.symbols = {}
+    this.tickers = {}
+    this.symbols = []
+
     this.getSymbols()
 
     this.socket = new WebSocket(`wss://stream.binance.com:9443/ws`)
@@ -24,20 +27,22 @@ export class BinanceModel {
           data: { symbols },
         } = response
 
-        symbols
-          .filter((s: any) => s.status === 'TRADING')
-          .map((s: any) => {
-            const symbol = s.symbol
-            this.symbols[symbol] = {
-              symbol: symbol,
-              base: s.baseAsset,
-              quote: s.quoteAsset,
-              askPrice: 0,
-              askQty: 0,
-              bidPrice: 0,
-              bidQty: 0,
-            }
-          })
+        const validSymbols = symbols.filter((s: any) => s.status === 'TRADING')
+
+        this.symbols = validSymbols.map((s: any) => s.symbol)
+
+        validSymbols.map((s: any) => {
+          const symbol = s.symbol
+          this.tickers[symbol] = {
+            symbol: symbol,
+            base: s.baseAsset,
+            quote: s.quoteAsset,
+            askPrice: 0,
+            askQty: 0,
+            bidPrice: 0,
+            bidQty: 0,
+          }
+        })
       })
       .catch((error) => {
         console.log(error)
@@ -52,11 +57,11 @@ export class BinanceModel {
         const bidPrice = parseFloat(ticker.b)
         const bidQty = parseFloat(ticker.B)
 
-        this.symbols[symbol].askPrice = askPrice
-        this.symbols[symbol].askQty = askQty
+        this.tickers[symbol].askPrice = askPrice
+        this.tickers[symbol].askQty = askQty
 
-        this.symbols[symbol].bidPrice = bidPrice
-        this.symbols[symbol].bidQty = bidQty
+        this.tickers[symbol].bidPrice = bidPrice
+        this.tickers[symbol].bidQty = bidQty
       })
     } catch (error) {
       console.log(error)
