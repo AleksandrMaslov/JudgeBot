@@ -6,7 +6,6 @@ import { Ticker } from '../../ticker.js'
 
 export class ExchangeModel {
   public tickers: any
-  public symbols: string[]
 
   symbolsUrl: string
   wsConnectionUrl: string
@@ -16,7 +15,6 @@ export class ExchangeModel {
 
   constructor() {
     this.tickers = {}
-    this.symbols = []
 
     this.symbolsUrl = ''
     this.wsConnectionUrl = ''
@@ -69,8 +67,6 @@ export class ExchangeModel {
       .then((response) => {
         const symbolsData = this.parseSymbolResponse(response)
 
-        this.defineSymbolsList(symbolsData)
-
         this.defineTickers(symbolsData)
 
         if (this.isDebugMode)
@@ -82,10 +78,6 @@ export class ExchangeModel {
       .catch((error) => {
         console.log(`* ${this.senderPrefix} - SymbolsRequestError`)
       })
-  }
-
-  private defineSymbolsList(symbolsData: { symbol: string }[]): void {
-    this.symbols = symbolsData.map((s: { symbol: string }) => s.symbol)
   }
 
   private defineTickers(symbolsData: any[]) {
@@ -141,8 +133,6 @@ export class ExchangeModel {
 
   extendTickersIfNeeded(symbol: string): void {
     if (this.tickers[symbol]) return
-
-    this.symbols.push(symbol)
 
     this.tickers[symbol] = new Ticker({
       symbol: symbol,
