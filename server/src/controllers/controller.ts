@@ -1,4 +1,4 @@
-import { BinanceModel } from '../models/binanceModel.js'
+import { BinanceModel } from '../models/exchanges/binanceModel.js'
 
 export class Controller {
   private model: BinanceModel

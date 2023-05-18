@@ -1,5 +1,5 @@
-import { ExchangeModel } from './base/exchangeModel.js'
-import { Symbol, BinanceTicker } from '../types'
+import { ExchangeModel } from './exchangeModel.js'
+import { Symbol, BinanceTicker } from '../../types'
 
 export class BinanceModel extends ExchangeModel {
   constructor() {

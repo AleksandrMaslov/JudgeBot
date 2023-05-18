@@ -1,4 +1,4 @@
-import { BinanceModel } from './models/binanceModel.js'
+import { BinanceModel } from './models/exchanges/binanceModel.js'
 import { KucoinModel } from './models/kucoinModel.js'
 import { Controller } from './controllers/controller.js'
 

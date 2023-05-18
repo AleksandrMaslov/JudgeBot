@@ -1,8 +1,8 @@
 import axios from 'axios'
 import WebSocket from 'ws'
 
-import { ExchangeModel } from './base/exchangeModel.js'
-import { Symbol, KucoinTicker } from '../types'
+import { ExchangeModel } from './exchangeModel.js'
+import { Symbol, KucoinTicker } from '../../types'
 
 export class KucoinModel extends ExchangeModel {
   private tokenUrl: string
