@@ -51,18 +51,19 @@ export class BinanceModel extends ExchangeModel {
     )
   }
 
-  updateTicker(tickerData: BinanceTicker): void {
-    const symbol = tickerData.s
+  updateTickers(tickersData: BinanceTicker[]): void {
+    tickersData.map((tickerData: BinanceTicker) => {
+      const { s, a, A, b, B } = tickerData
 
-    const askPrice = parseFloat(tickerData.a)
-    const askQty = parseFloat(tickerData.A)
-    const bidPrice = parseFloat(tickerData.b)
-    const bidQty = parseFloat(tickerData.B)
+      this.extendTickersIfNeeded(s)
 
-    this.tickers[symbol].askPrice = askPrice
-    this.tickers[symbol].askQty = askQty
-
-    this.tickers[symbol].bidPrice = bidPrice
-    this.tickers[symbol].bidQty = bidQty
+      this.updateTickerBySymbolData({
+        symbol: s,
+        askPrice: parseFloat(a),
+        askQty: parseFloat(A),
+        bidPrice: parseFloat(b),
+        bidQty: parseFloat(B),
+      })
+    })
   }
 }

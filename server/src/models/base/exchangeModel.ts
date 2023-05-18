@@ -50,13 +50,15 @@ export class ExchangeModel {
     return new WebSocket(this.wsConnectionUrl)
   }
 
+  messageHandler(messageData: any): void {}
+
   isDataMessageNotValid(messageData: any): boolean {
     return false
   }
 
   subscribeAllTickers(): void {}
 
-  updateTicker(tickerData: any): void {}
+  updateTickers(tickerData: any): void {}
 
   // GET SYMBOLS
   async getSymbols(): Promise<void> {
@@ -105,6 +107,8 @@ export class ExchangeModel {
   private onSocketMessage(event: WebSocket.MessageEvent): void {
     const messageData = JSON.parse(event.data.toString())
 
+    this.messageHandler(messageData)
+
     if (this.isDataMessageNotValid(messageData)) return
 
     this.processData(messageData)
@@ -126,18 +130,35 @@ export class ExchangeModel {
   }
 
   // UTILS
-  private processData = (tickersData: any[]): void => {
+  private processData(tickersData: any[]): void {
     try {
-      tickersData.map((tickerData: any) => {
-        this.updateTicker(tickerData)
-      })
-
-      if (this.isDebugMode)
-        console.log(
-          `${this.senderPrefix} - Updated ${tickersData.length} tickers`
-        )
+      this.updateTickers(tickersData)
     } catch (error) {
       console.log(`* ${this.senderPrefix} - ProcessingError \n${error}`)
     }
+  }
+
+  extendTickersIfNeeded(symbol: string): void {
+    if (this.tickers[symbol]) return
+
+    this.tickers[symbol] = {
+      symbol: symbol,
+      base: 'UNDEFINED',
+      quote: 'UNDEFINED',
+      askPrice: 0,
+      askQty: 0,
+      bidPrice: 0,
+      bidQty: 0,
+    }
+  }
+
+  updateTickerBySymbolData(symbolData: Symbol) {
+    const { symbol, askPrice, askQty, bidPrice, bidQty } = symbolData
+
+    this.tickers[symbol].askPrice = askPrice
+    this.tickers[symbol].askQty = askQty
+
+    this.tickers[symbol].bidPrice = bidPrice
+    this.tickers[symbol].bidQty = bidQty
   }
 }
