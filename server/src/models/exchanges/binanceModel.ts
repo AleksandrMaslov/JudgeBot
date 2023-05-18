@@ -1,4 +1,4 @@
-import { ExchangeModel } from './exchangeModel.js'
+import { ExchangeModel } from './base/exchangeModel.js'
 import { SymbolData, BinanceTicker } from '../../types'
 
 export class BinanceModel extends ExchangeModel {

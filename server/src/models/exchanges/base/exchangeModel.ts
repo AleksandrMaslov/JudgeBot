@@ -1,8 +1,8 @@
 import axios from 'axios'
 import WebSocket from 'ws'
 
-import { SymbolData, SymbolUpdate } from '../../types'
-import { Ticker } from '../ticker.js'
+import { SymbolData, SymbolUpdate } from '../../../types'
+import { Ticker } from '../../ticker.js'
 
 export class ExchangeModel {
   public tickers: any
