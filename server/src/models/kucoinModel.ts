@@ -2,7 +2,7 @@ import axios from 'axios'
 import WebSocket from 'ws'
 
 import { ExchangeModel } from './base/exchangeModel.js'
-import { Symbol, BinanceTicker } from '../types'
+import { Symbol, KucoinTicker } from '../types'
 
 export class KucoinModel extends ExchangeModel {
   private tokenUrl: string
@@ -24,6 +24,7 @@ export class KucoinModel extends ExchangeModel {
     this.lastPingTime = Date.now()
 
     this.init()
+    this.definePingTimer()
   }
 
   parseSymbolResponse(response: any): any[] {
@@ -55,36 +56,52 @@ export class KucoinModel extends ExchangeModel {
     return new WebSocket(`${endpoint}?token=${token}`)
   }
 
-  isDataMessageNotValid(messageData: any): boolean {
+  messageHandler(messageData: any): void {
+    const { type, id } = messageData
+    if (type === 'welcome') {
+      this.id = id
+
+      this.socket?.send(
+        JSON.stringify({
+          id: id,
+          type: 'subscribe',
+          topic: '/market/ticker:all',
+          privateChannel: false,
+          response: true,
+        })
+      )
+
+      return
+    }
+
+    if (type === 'ack') return
+    if (type === 'pong') return
+    if (type === 'message') return
+
     console.log(messageData)
-    // VALIDATION
-
-    return false
   }
 
-  subscribeAllTickers(): void {
-    this.socket!.send(
-      JSON.stringify({
-        method: 'SUBSCRIBE',
-        params: ['!ticker@arr'],
-        id: 987654321,
-      })
-    )
+  isDataMessageNotValid(messageData: any): boolean {
+    const { topic } = messageData
+    if (topic === '/market/ticker:all') return false
+    return true
   }
 
-  updateTicker(tickerData: BinanceTicker): void {
-    const symbol = tickerData.s
+  updateTickers(tickersData: KucoinTicker): void {
+    const {
+      subject,
+      data: { bestAsk, bestAskSize, bestBid, bestBidSize },
+    } = tickersData
 
-    const askPrice = parseFloat(tickerData.a)
-    const askQty = parseFloat(tickerData.A)
-    const bidPrice = parseFloat(tickerData.b)
-    const bidQty = parseFloat(tickerData.B)
+    this.extendTickersIfNeeded(subject)
 
-    this.tickers[symbol].askPrice = askPrice
-    this.tickers[symbol].askQty = askQty
-
-    this.tickers[symbol].bidPrice = bidPrice
-    this.tickers[symbol].bidQty = bidQty
+    this.updateTickerBySymbolData({
+      symbol: subject,
+      askPrice: parseFloat(bestAsk),
+      askQty: parseFloat(bestAskSize),
+      bidPrice: parseFloat(bestBid),
+      bidQty: parseFloat(bestBidSize),
+    })
   }
 
   private async requestToken(
@@ -97,5 +114,36 @@ export class KucoinModel extends ExchangeModel {
     const { token } = data
     const { endpoint } = data.instanceServers[0]
     return { token: token, endpoint: endpoint }
+  }
+
+  private async definePingTimer(): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      while (!this.isTimeToPing()) await this.delay(1000)
+      this.ping()
+      resolve()
+      this.definePingTimer()
+    })
+  }
+
+  private isTimeToPing(): boolean {
+    const current = Date.now()
+    const diff = current - this.lastPingTime
+    if (diff > this.pingTimer) return true
+    return false
+  }
+
+  private ping(): void {
+    this.lastPingTime = Date.now()
+
+    this.socket?.send(
+      JSON.stringify({
+        id: this.id,
+        type: 'ping',
+      })
+    )
+  }
+
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 }
