@@ -1,5 +1,5 @@
 import { ExchangeModel } from './exchangeModel.js'
-import { Symbol, BinanceTicker } from '../../types'
+import { SymbolData, BinanceTicker } from '../../types'
 
 export class BinanceModel extends ExchangeModel {
   constructor() {
@@ -25,15 +25,11 @@ export class BinanceModel extends ExchangeModel {
     return symbolsData.filter((s: any) => s.status === 'TRADING')
   }
 
-  parseTicker(symbolData: any): Symbol {
+  parseTicker(symbolData: any): SymbolData {
     return {
       symbol: symbolData.symbol,
       base: symbolData.baseAsset,
       quote: symbolData.quoteAsset,
-      askPrice: 0,
-      askQty: 0,
-      bidPrice: 0,
-      bidQty: 0,
     }
   }
 
@@ -57,7 +53,7 @@ export class BinanceModel extends ExchangeModel {
 
       this.extendTickersIfNeeded(s)
 
-      this.updateTickerBySymbolData({
+      this.updateTickerBySymbolUpdate({
         symbol: s,
         askPrice: parseFloat(a),
         askQty: parseFloat(A),

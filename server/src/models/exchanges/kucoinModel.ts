@@ -2,7 +2,7 @@ import axios from 'axios'
 import WebSocket from 'ws'
 
 import { ExchangeModel } from './exchangeModel.js'
-import { Symbol, KucoinTicker } from '../../types'
+import { SymbolData, KucoinTicker } from '../../types'
 
 export class KucoinModel extends ExchangeModel {
   private tokenUrl: string
@@ -39,15 +39,11 @@ export class KucoinModel extends ExchangeModel {
     return symbolsData.filter((d: any) => d.enableTrading)
   }
 
-  parseTicker(symbolData: any): Symbol {
+  parseTicker(symbolData: any): SymbolData {
     return {
       symbol: symbolData.symbol,
       base: symbolData.baseCurrency,
       quote: symbolData.quoteCurrency,
-      askPrice: 0,
-      askQty: 0,
-      bidPrice: 0,
-      bidQty: 0,
     }
   }
 
@@ -95,7 +91,7 @@ export class KucoinModel extends ExchangeModel {
 
     this.extendTickersIfNeeded(subject)
 
-    this.updateTickerBySymbolData({
+    this.updateTickerBySymbolUpdate({
       symbol: subject,
       askPrice: parseFloat(bestAsk),
       askQty: parseFloat(bestAskSize),

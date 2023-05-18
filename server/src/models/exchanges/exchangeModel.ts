@@ -1,7 +1,8 @@
 import axios from 'axios'
 import WebSocket from 'ws'
 
-import { Symbol } from '../../types'
+import { SymbolData, SymbolUpdate } from '../../types'
+import { Ticker } from '../ticker.js'
 
 export class ExchangeModel {
   public tickers: any
@@ -42,7 +43,7 @@ export class ExchangeModel {
     return []
   }
 
-  parseTicker(symbolData: any): Symbol {
+  parseTicker(symbolData: any): SymbolData {
     return symbolData
   }
 
@@ -90,7 +91,7 @@ export class ExchangeModel {
   private defineTickers(symbolsData: any[]) {
     symbolsData.map((symbolData: any) => {
       const symbol = symbolData.symbol
-      this.tickers[symbol] = this.parseTicker(symbolData)
+      this.tickers[symbol] = new Ticker(this.parseTicker(symbolData))
     })
   }
 
@@ -141,18 +142,16 @@ export class ExchangeModel {
   extendTickersIfNeeded(symbol: string): void {
     if (this.tickers[symbol]) return
 
-    this.tickers[symbol] = {
+    this.symbols.push(symbol)
+
+    this.tickers[symbol] = new Ticker({
       symbol: symbol,
       base: 'UNDEFINED',
       quote: 'UNDEFINED',
-      askPrice: 0,
-      askQty: 0,
-      bidPrice: 0,
-      bidQty: 0,
-    }
+    })
   }
 
-  updateTickerBySymbolData(symbolData: Symbol) {
+  updateTickerBySymbolUpdate(symbolData: SymbolUpdate) {
     const { symbol, askPrice, askQty, bidPrice, bidQty } = symbolData
 
     this.tickers[symbol].askPrice = askPrice

@@ -1,7 +1,5 @@
-export type Symbol = {
+export type SymbolUpdate = {
   symbol: string
-  base?: string
-  quote?: string
   askPrice: number
   askQty: number
   bidPrice: number
