@@ -1,15 +1,17 @@
 import axios from 'axios'
 import WebSocket from 'ws'
 
+import { Symbol } from '../../types'
+
 export class ExchangeModel {
   public tickers: any
   public symbols: string[]
 
   symbolsUrl: string
   wsConnectionUrl: string
-  errorPrefix: string
-
-  private socket?: WebSocket
+  senderPrefix: string
+  socket?: WebSocket
+  isDebugMode: boolean
 
   constructor() {
     this.tickers = {}
@@ -17,7 +19,8 @@ export class ExchangeModel {
 
     this.symbolsUrl = ''
     this.wsConnectionUrl = ''
-    this.errorPrefix = ''
+    this.senderPrefix = ''
+    this.isDebugMode = false
 
     if (this.constructor == ExchangeModel) {
       throw new Error("Abstract classes can't be instantiated.")
@@ -39,7 +42,7 @@ export class ExchangeModel {
     return []
   }
 
-  parseSymbol(symbolData: any): any {
+  parseTicker(symbolData: any): Symbol {
     return symbolData
   }
 
@@ -49,7 +52,7 @@ export class ExchangeModel {
 
   subscribeAllTickers(): void {}
 
-  parseTicker(tickerData: any): void {}
+  updateTicker(tickerData: any): void {}
 
   // GET SYMBOLS
   private async getSymbols(): Promise<void> {
@@ -62,10 +65,15 @@ export class ExchangeModel {
         this.defineSymbolsList(symbolsData)
 
         this.defineTickers(symbolsData)
+
+        if (this.isDebugMode)
+          console.log(
+            `* ${this.senderPrefix} - Got ${symbolsData.length} symbols data`
+          )
       })
 
       .catch((error) => {
-        console.log(`${this.errorPrefix} - RequestError`)
+        console.log(`* ${this.senderPrefix} - SymbolsRequestError`)
       })
   }
 
@@ -76,7 +84,7 @@ export class ExchangeModel {
   private defineTickers(symbolsData: any[]) {
     symbolsData.map((symbolData: any) => {
       const symbol = symbolData.symbol
-      this.tickers[symbol] = this.parseSymbol(symbolData)
+      this.tickers[symbol] = this.parseTicker(symbolData)
     })
   }
 
@@ -100,24 +108,32 @@ export class ExchangeModel {
 
   private onSocketOpen(): void {
     this.subscribeAllTickers()
+
+    if (this.isDebugMode)
+      console.log(`* ${this.senderPrefix} - Tickers data connected`)
   }
 
   private onSocketClose(): void {
-    console.log(`${this.errorPrefix} - WS Closed Message`)
+    console.log(`* ${this.senderPrefix} - WS Closed message`)
   }
 
   private onSocketError(): void {
-    console.log(`${this.errorPrefix} - WS Error Message`)
+    console.log(`* ${this.senderPrefix} - WS Error message`)
   }
 
   // UTILS
   private processData = (tickersData: any[]): void => {
     try {
       tickersData.map((tickerData: any) => {
-        this.parseTicker(tickerData)
+        this.updateTicker(tickerData)
       })
+
+      if (this.isDebugMode)
+        console.log(
+          `${this.senderPrefix} - Updated ${tickersData.length} tickers`
+        )
     } catch (error) {
-      console.log(`${this.errorPrefix} - ProcessingError`)
+      console.log(`* ${this.senderPrefix} - ProcessingError \n${error}`)
     }
   }
 }
