@@ -46,8 +46,12 @@ export class ExchangeModel {
     return symbolData
   }
 
+  async initWS(): Promise<WebSocket> {
+    return new WebSocket(this.wsConnectionUrl)
+  }
+
   isDataMessageNotValid(messageData: any): boolean {
-    return true
+    return false
   }
 
   subscribeAllTickers(): void {}
@@ -55,7 +59,7 @@ export class ExchangeModel {
   updateTicker(tickerData: any): void {}
 
   // GET SYMBOLS
-  private async getSymbols(): Promise<void> {
+  async getSymbols(): Promise<void> {
     await axios
       .get(this.symbolsUrl)
 
@@ -89,8 +93,8 @@ export class ExchangeModel {
   }
 
   // WS CONNECTION
-  private connect(): void {
-    this.socket = new WebSocket(this.wsConnectionUrl)
+  private async connect(): Promise<void> {
+    this.socket = await this.initWS()
     this.socket.onopen = () => this.onSocketOpen()
     this.socket.onerror = () => this.onSocketError()
     this.socket.onclose = () => this.onSocketClose()
