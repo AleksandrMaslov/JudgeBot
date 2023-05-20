@@ -18,22 +18,7 @@ export class Controller {
   }
 
   private process() {
-    console.log(Object.keys(this.binance.getTickers()).length)
-    console.log(Object.keys(this.kucoin.getTickers()).length)
-
-    // FILTER WITH 0 PRICE
-    // const baseExchange = this.getSmallerExchangeOfTwo(this.binance, this.kucoin)
+    const asset = 'USDT'
+    this.binance.getTradeablePairsWith(this.kucoin, asset)
   }
-
-  private getTradeblePairsOfTwo(
-    exchangeA: ExchangeModel,
-    exchangeB: ExchangeModel
-  ): ExchangeModel {
-    // const baseSymbolsA = this.binance.getBaseTickers(this.baseAsset)
-    return exchangeA
-  }
-
-  // private getBaseSymbolsList(exchange: ExchangeModel) {
-  //   return exchange.tickers.
-  // }
 }

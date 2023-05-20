@@ -33,44 +33,26 @@ export class ExchangeModel {
   }
 
   // PUBLIC METHODS
-  public getTickers() {
-    let tickers: any = {}
-    for (const pair of Object.entries<Ticker>(this.tickers)) {
-      const [symbol, ticker] = pair
-      if (!ticker.askPrice) break
-      if (!ticker.askQty) break
-      if (!ticker.bidPrice) break
-      // if (!ticker.bidQty) break
-      if (ticker.askPrice === 0) break
-      if (ticker.askQty === 0) break
-      if (ticker.bidPrice === 0) break
-      if (ticker.bidQty === 0) break
-
-      tickers[symbol] = ticker
-    }
-    return tickers
-  }
-
-  public getTradeablePairsWith(
-    exchange: ExchangeModel,
-    asset: string
-  ): [Ticker, Ticker][] {
-    // as optimization baseAssetFiltering could be added to models
+  public getTradeablePairsWith(exchange: ExchangeModel, asset: string): void {
     const currentBasedTickers = this.getBasedTickers(asset)
     const exchangeBasedTickers = exchange.getBasedTickers(asset)
 
-    return []
-  }
+    const currentLength = Object.keys(currentBasedTickers).length
+    const exchangeLength = Object.keys(exchangeBasedTickers).length
 
-  public getBasedTickers(asset: string): {} {
-    let tickers: any = {}
-    for (const pair of Object.entries<Ticker>(this.tickers)) {
-      const [symbol, ticker] = pair
-      if (!symbol.includes(asset)) break
-      if (ticker.askPrice === 0 || ticker.bidPrice === 0) break
-      tickers[symbol] = ticker
-    }
-    return tickers
+    console.log(currentLength, exchangeLength)
+
+    let pairs: Ticker[][]
+    if (currentLength < exchangeLength)
+      pairs = this.defineTradeablePairs(
+        currentBasedTickers,
+        exchangeBasedTickers
+      )
+    else
+      pairs = this.defineTradeablePairs(
+        exchangeBasedTickers,
+        currentBasedTickers
+      )
   }
 
   // ABSTRACT INTERNAL METHODS
@@ -190,6 +172,71 @@ export class ExchangeModel {
     this.subscribeAllTickers()
 
     if (this.isDebugMode) this.logConnection()
+  }
+
+  // TRADING UTILS
+  private getBasedTickers(asset: string): {} {
+    let tickers: any = {}
+    for (const pair of Object.entries<Ticker>(this.tickers)) {
+      const [symbol, ticker] = pair
+
+      if (!symbol.includes(asset)) continue
+      if (!ticker.askPrice) continue
+      // if (!ticker.askQty) continue
+      if (!ticker.bidPrice) continue
+      // if (!ticker.bidQty) continue
+      if (ticker.askPrice === 0) continue
+      if (ticker.askQty === 0) continue
+      if (ticker.bidPrice === 0) continue
+      if (ticker.bidQty === 0) continue
+
+      const pairAsset = symbol.replace(asset, '').replace('-', '')
+      tickers[pairAsset] = ticker
+    }
+    return tickers
+  }
+
+  private defineTradeablePairs(baseTickers: any, tickers: any): Ticker[][] {
+    const tradePairs = []
+    const spreads = []
+
+    for (const pair of Object.entries<Ticker>(baseTickers)) {
+      const [pairAsset, ticker] = pair
+      if (!tickers[pairAsset]) continue
+
+      const pairTicker: Ticker = tickers[pairAsset]
+      tradePairs.push([ticker, pairTicker])
+
+      let spreadA: number
+      let spreadB: number
+      let proffitA: number
+      let proffitB: number
+      if (ticker.base === pairTicker.base) {
+        spreadA = ticker.askPrice! - pairTicker.bidPrice!
+        proffitA = parseFloat(((spreadA * 100) / ticker.askPrice!).toFixed(2))
+        spreadB = pairTicker.askPrice! - ticker.bidPrice!
+        proffitB = parseFloat(
+          ((spreadB * 100) / pairTicker.askPrice!).toFixed(2)
+        )
+      } else {
+        console.log('different!', ticker.base, pairTicker.base)
+        // FIX
+        spreadA = ticker.askPrice! - pairTicker.bidPrice!
+        proffitA = parseFloat(((spreadA * 100) / ticker.askPrice!).toFixed(2))
+        spreadB = pairTicker.askPrice! - ticker.bidPrice!
+        proffitB = parseFloat(
+          ((spreadB * 100) / pairTicker.askPrice!).toFixed(2)
+        )
+      }
+
+      if (proffitA > 2 || proffitB > 2)
+        spreads.push([pairAsset, proffitA, proffitB])
+    }
+
+    console.log(spreads.length)
+    console.log(spreads)
+
+    return tradePairs
   }
 
   // INTERNAL UTILS
