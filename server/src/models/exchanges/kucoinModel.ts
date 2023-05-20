@@ -2,7 +2,15 @@ import axios from 'axios'
 import WebSocket from 'ws'
 
 import { ExchangeModel } from './base/exchangeModel.js'
-import { SymbolData, KucoinTicker } from '../../types'
+import {
+  SymbolData,
+  TickerUpdate,
+  KucoinTicker,
+  KucoinSymbolResponse,
+  KucoinSymbolData,
+  KucoinTickerResponse,
+  KucoinTickerData,
+} from '../../types'
 
 export class KucoinModel extends ExchangeModel {
   private tokenUrl: string
@@ -15,6 +23,7 @@ export class KucoinModel extends ExchangeModel {
     super()
 
     this.symbolsUrl = 'https://api.kucoin.com/api/v2/symbols'
+    this.tickersUrl = 'https://api.kucoin.com/api/v1/market/allTickers'
     this.wsConnectionUrl = 'wss://stream.binance.com:9443/ws'
     this.tokenUrl = 'https://api.kucoin.com/api/v1/bullet-public'
     this.senderPrefix = this.constructor.name
@@ -27,7 +36,10 @@ export class KucoinModel extends ExchangeModel {
     this.definePingTimer()
   }
 
-  parseSymbolResponse(response: any): any[] {
+  // OVERRIDE SYMBOLS DATA METHODS
+  parseSymbolsResponse(response: {
+    data: KucoinSymbolResponse
+  }): KucoinSymbolData[] {
     const {
       data: { data },
     } = response
@@ -35,11 +47,13 @@ export class KucoinModel extends ExchangeModel {
     return this.getValidSymbols(data)
   }
 
-  getValidSymbols(symbolsData: any[]): any[] {
-    return symbolsData.filter((d: any) => d.enableTrading)
+  getValidSymbols(symbolsData: KucoinSymbolData[]): KucoinSymbolData[] {
+    return symbolsData.filter(
+      (symbolData: KucoinSymbolData) => symbolData.enableTrading
+    )
   }
 
-  parseTicker(symbolData: any): SymbolData {
+  parseSymbolData(symbolData: KucoinSymbolData): SymbolData {
     return {
       symbol: symbolData.symbol,
       base: symbolData.baseCurrency,
@@ -47,6 +61,36 @@ export class KucoinModel extends ExchangeModel {
     }
   }
 
+  // OVERRIDE TICKERS DATA METHODS
+  parseTickersResponse(response: {
+    data: KucoinTickerResponse
+  }): KucoinTickerData[] {
+    const {
+      data: {
+        data: { ticker },
+      },
+    } = response
+    return this.getValidTickers(ticker)
+  }
+
+  getValidTickers(tickersData: KucoinTickerData[]): KucoinTickerData[] {
+    return tickersData.filter(
+      (tickerData: KucoinTickerData) =>
+        tickerData.buy !== '0' && tickerData.sell !== '0'
+    )
+  }
+
+  parseTickerData(tickerData: KucoinTickerData): TickerUpdate {
+    return {
+      symbol: tickerData.symbol,
+      askPrice: parseFloat(tickerData.buy),
+      askQty: undefined,
+      bidPrice: parseFloat(tickerData.sell),
+      bidQty: undefined,
+    }
+  }
+
+  // OVERRIDE WS DATA METHODS
   async initWS(): Promise<WebSocket> {
     const { token, endpoint } = await this.requestToken(this.tokenUrl)
     return new WebSocket(`${endpoint}?token=${token}`)
@@ -83,15 +127,15 @@ export class KucoinModel extends ExchangeModel {
     return true
   }
 
-  updateTickers(tickersData: KucoinTicker): void {
+  updateTickers(tickerData: KucoinTicker): void {
     const {
       subject,
       data: { bestAsk, bestAskSize, bestBid, bestBidSize },
-    } = tickersData
+    } = tickerData
 
-    this.extendTickersIfNeeded(subject)
+    this.ensureTicker({ symbol: subject })
 
-    this.updateTickerBySymbolUpdate({
+    this.updateTickerData({
       symbol: subject,
       askPrice: parseFloat(bestAsk),
       askQty: parseFloat(bestAskSize),
@@ -100,6 +144,7 @@ export class KucoinModel extends ExchangeModel {
     })
   }
 
+  // PRIVATE METHODS
   private async requestToken(
     url: string
   ): Promise<{ token: string; endpoint: string }> {

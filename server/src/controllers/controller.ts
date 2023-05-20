@@ -4,11 +4,11 @@ import { KucoinModel } from '../models/exchanges/kucoinModel.js'
 
 export class Controller {
   private binance: BinanceModel
-  // private kucoin: KucoinModel
+  private kucoin: KucoinModel
 
   constructor() {
     this.binance = new BinanceModel()
-    // this.kucoin = new KucoinModel()
+    this.kucoin = new KucoinModel()
   }
 
   public refresh(timer: number): NodeJS.Timer {
