@@ -26,6 +26,8 @@ export class KucoinModel extends ExchangeModel {
     this.tickersUrl = 'https://api.kucoin.com/api/v1/market/allTickers'
     this.wsConnectionUrl = 'wss://stream.binance.com:9443/ws'
     this.tokenUrl = 'https://api.kucoin.com/api/v1/bullet-public'
+    this.tickersTopic = '/market/ticker:all'
+
     this.senderPrefix = this.constructor.name
     this.isDebugMode = true
 
@@ -105,7 +107,7 @@ export class KucoinModel extends ExchangeModel {
         JSON.stringify({
           id: id,
           type: 'subscribe',
-          topic: '/market/ticker:all',
+          topic: this.tickersTopic,
           privateChannel: false,
           response: true,
         })

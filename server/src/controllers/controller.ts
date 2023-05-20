@@ -18,6 +18,9 @@ export class Controller {
   }
 
   private process() {
+    console.log(Object.keys(this.binance.getTickers()).length)
+    console.log(Object.keys(this.kucoin.getTickers()).length)
+
     // FILTER WITH 0 PRICE
     // const baseExchange = this.getSmallerExchangeOfTwo(this.binance, this.kucoin)
   }

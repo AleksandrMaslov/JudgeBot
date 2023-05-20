@@ -16,6 +16,8 @@ export class BinanceModel extends ExchangeModel {
     this.symbolsUrl = 'https://api.binance.com/api/v3/exchangeInfo'
     this.tickersUrl = 'https://api.binance.com/api/v3/ticker/bookTicker'
     this.wsConnectionUrl = 'wss://stream.binance.com:9443/ws'
+    this.tickersTopic = '!ticker@arr'
+
     this.senderPrefix = this.constructor.name
     this.isDebugMode = true
 
@@ -84,7 +86,7 @@ export class BinanceModel extends ExchangeModel {
     this.socket!.send(
       JSON.stringify({
         method: 'SUBSCRIBE',
-        params: ['!ticker@arr'],
+        params: [this.tickersTopic],
         id: 987654321,
       })
     )

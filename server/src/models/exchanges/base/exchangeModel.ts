@@ -10,6 +10,8 @@ export class ExchangeModel {
   symbolsUrl: string
   tickersUrl: string
   wsConnectionUrl: string
+  tickersTopic: string
+
   senderPrefix: string
   socket?: WebSocket
   isDebugMode: boolean
@@ -20,6 +22,7 @@ export class ExchangeModel {
     this.symbolsUrl = ''
     this.tickersUrl = ''
     this.wsConnectionUrl = ''
+    this.tickersTopic = ''
 
     this.senderPrefix = ''
     this.isDebugMode = false
@@ -30,6 +33,24 @@ export class ExchangeModel {
   }
 
   // PUBLIC METHODS
+  public getTickers() {
+    let tickers: any = {}
+    for (const pair of Object.entries<Ticker>(this.tickers)) {
+      const [symbol, ticker] = pair
+      if (!ticker.askPrice) break
+      if (!ticker.askQty) break
+      if (!ticker.bidPrice) break
+      // if (!ticker.bidQty) break
+      if (ticker.askPrice === 0) break
+      if (ticker.askQty === 0) break
+      if (ticker.bidPrice === 0) break
+      if (ticker.bidQty === 0) break
+
+      tickers[symbol] = ticker
+    }
+    return tickers
+  }
+
   public getTradeablePairsWith(
     exchange: ExchangeModel,
     asset: string
