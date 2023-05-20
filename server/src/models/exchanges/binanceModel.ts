@@ -22,7 +22,7 @@ export class BinanceModel extends ExchangeModel {
     this.init()
   }
 
-  // SYMBOLS DATA
+  // OVERRIDE SYMBOLS DATA METHODS
   parseSymbolsResponse(response: {
     data: BinanceSymbolResponse
   }): BinanceSymbolData[] {
@@ -47,7 +47,7 @@ export class BinanceModel extends ExchangeModel {
     }
   }
 
-  // TICKERS DATA
+  // OVERRIDE TICKERS DATA METHODS
   parseTickersResponse(response: {
     data: BinanceTickerResponse
   }): BinanceTickerData[] {
@@ -58,10 +58,10 @@ export class BinanceModel extends ExchangeModel {
   getValidTickers(tickersData: BinanceTickerData[]): BinanceTickerData[] {
     return tickersData.filter(
       (tickerData: BinanceTickerData) =>
-        parseFloat(tickerData.askPrice) === 0 ||
-        parseFloat(tickerData.askQty) === 0 ||
-        parseFloat(tickerData.bidPrice) === 0 ||
-        parseFloat(tickerData.bidQty) === 0
+        tickerData.askPrice !== '0' &&
+        tickerData.askQty !== '0' &&
+        tickerData.bidPrice !== '0' &&
+        tickerData.bidQty !== '0'
     )
   }
 
@@ -75,7 +75,7 @@ export class BinanceModel extends ExchangeModel {
     }
   }
 
-  // WS DATA
+  // OVERRIDE WS DATA METHODS
   isDataMessageNotValid(messageData: any): boolean {
     return messageData.result === null
   }
