@@ -30,7 +30,7 @@ export class ExchangeModel {
   }
 
   // PUBLIC METHODS
-  public getTradablePairsWith(
+  public getTradeablePairsWith(
     exchange: ExchangeModel,
     asset: string
   ): [Ticker, Ticker][] {
