@@ -78,7 +78,7 @@ export class KucoinModel extends ExchangeModel {
   getValidTickers(tickersData: KucoinTickerData[]): KucoinTickerData[] {
     return tickersData.filter(
       (tickerData: KucoinTickerData) =>
-        tickerData.buy !== '0' && tickerData.sell !== '0'
+        parseFloat(tickerData.buy) !== 0 && parseFloat(tickerData.sell) !== 0
     )
   }
 
@@ -86,9 +86,9 @@ export class KucoinModel extends ExchangeModel {
     return {
       symbol: tickerData.symbol,
       askPrice: parseFloat(tickerData.buy),
-      askQty: undefined,
+      askQty: 0,
       bidPrice: parseFloat(tickerData.sell),
-      bidQty: undefined,
+      bidQty: 0,
     }
   }
 
