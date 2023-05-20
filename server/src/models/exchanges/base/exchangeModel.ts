@@ -129,7 +129,6 @@ export class ExchangeModel {
           this.ensureTicker(tickerData)
           this.updateTickerData(tickerData)
         })
-
         if (this.isDebugMode) this.logTickersResponse(rawTickersData)
       })
 
