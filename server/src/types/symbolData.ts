@@ -1,5 +1,5 @@
 export type SymbolData = {
   symbol: string
-  base: string
-  quote: string
+  base?: string
+  quote?: string
 }

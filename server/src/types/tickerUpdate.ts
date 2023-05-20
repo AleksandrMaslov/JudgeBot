@@ -1,4 +1,4 @@
-export type SymbolUpdate = {
+export type TickerUpdate = {
   symbol: string
   askPrice: number
   askQty: number
