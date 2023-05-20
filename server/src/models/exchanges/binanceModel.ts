@@ -1,11 +1,20 @@
 import { ExchangeModel } from './base/exchangeModel.js'
-import { SymbolData, BinanceTicker } from '../../types'
+import {
+  SymbolData,
+  BinanceTicker,
+  BinanceSymbolResponse,
+  BinanceSymbolData,
+  TickerUpdate,
+  BinanceTickerResponse,
+  BinanceTickerData,
+} from '../../types'
 
 export class BinanceModel extends ExchangeModel {
   constructor() {
     super()
 
     this.symbolsUrl = 'https://api.binance.com/api/v3/exchangeInfo'
+    this.tickersUrl = 'https://api.binance.com/api/v3/ticker/bookTicker'
     this.wsConnectionUrl = 'wss://stream.binance.com:9443/ws'
     this.senderPrefix = this.constructor.name
     this.isDebugMode = true
@@ -13,7 +22,10 @@ export class BinanceModel extends ExchangeModel {
     this.init()
   }
 
-  parseSymbolResponse(response: any): any[] {
+  // SYMBOLS DATA
+  parseSymbolsResponse(response: {
+    data: BinanceSymbolResponse
+  }): BinanceSymbolData[] {
     const {
       data: { symbols },
     } = response
@@ -21,11 +33,13 @@ export class BinanceModel extends ExchangeModel {
     return this.getValidSymbols(symbols)
   }
 
-  getValidSymbols(symbolsData: any[]): any[] {
-    return symbolsData.filter((s: any) => s.status === 'TRADING')
+  getValidSymbols(symbolsData: BinanceSymbolData[]): BinanceSymbolData[] {
+    return symbolsData.filter(
+      (symbolData: BinanceSymbolData) => symbolData.status === 'TRADING'
+    )
   }
 
-  parseTicker(symbolData: any): SymbolData {
+  parseSymbolData(symbolData: BinanceSymbolData): SymbolData {
     return {
       symbol: symbolData.symbol,
       base: symbolData.baseAsset,
@@ -33,6 +47,35 @@ export class BinanceModel extends ExchangeModel {
     }
   }
 
+  // TICKERS DATA
+  parseTickersResponse(response: {
+    data: BinanceTickerResponse
+  }): BinanceTickerData[] {
+    const { data } = response
+    return this.getValidTickers(data)
+  }
+
+  getValidTickers(tickersData: BinanceTickerData[]): BinanceTickerData[] {
+    return tickersData.filter(
+      (tickerData: BinanceTickerData) =>
+        parseFloat(tickerData.askPrice) === 0 ||
+        parseFloat(tickerData.askQty) === 0 ||
+        parseFloat(tickerData.bidPrice) === 0 ||
+        parseFloat(tickerData.bidQty) === 0
+    )
+  }
+
+  parseTickerData(tickerData: BinanceTickerData): TickerUpdate {
+    return {
+      symbol: tickerData.symbol,
+      askPrice: parseFloat(tickerData.askPrice),
+      askQty: parseFloat(tickerData.askQty),
+      bidPrice: parseFloat(tickerData.bidPrice),
+      bidQty: parseFloat(tickerData.bidQty),
+    }
+  }
+
+  // WS DATA
   isDataMessageNotValid(messageData: any): boolean {
     return messageData.result === null
   }
@@ -51,9 +94,9 @@ export class BinanceModel extends ExchangeModel {
     tickersData.map((tickerData: BinanceTicker) => {
       const { s, a, A, b, B } = tickerData
 
-      this.extendTickersIfNeeded(s)
+      this.ensureTicker({ symbol: s })
 
-      this.updateTickerBySymbolUpdate({
+      this.updateTickerData({
         symbol: s,
         askPrice: parseFloat(a),
         askQty: parseFloat(A),
