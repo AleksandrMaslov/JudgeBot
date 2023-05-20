@@ -58,10 +58,10 @@ export class BinanceModel extends ExchangeModel {
   getValidTickers(tickersData: BinanceTickerData[]): BinanceTickerData[] {
     return tickersData.filter(
       (tickerData: BinanceTickerData) =>
-        tickerData.askPrice !== '0' &&
-        tickerData.askQty !== '0' &&
-        tickerData.bidPrice !== '0' &&
-        tickerData.bidQty !== '0'
+        parseFloat(tickerData.askPrice) !== 0 &&
+        parseFloat(tickerData.askQty) !== 0 &&
+        parseFloat(tickerData.bidPrice) !== 0 &&
+        parseFloat(tickerData.bidQty) !== 0
     )
   }
 
