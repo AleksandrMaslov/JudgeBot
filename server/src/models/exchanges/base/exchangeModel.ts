@@ -187,7 +187,7 @@ export class ExchangeModel {
   }
 
   private getBasedTickers(asset: string): {} {
-    let tickers: any = { exchange: this.constructor.name }
+    let tickers: any = {}
 
     for (const pair of Object.entries<Ticker>(this.tickers)) {
       const [symbol, ticker] = pair
