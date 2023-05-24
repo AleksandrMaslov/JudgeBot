@@ -43,7 +43,7 @@ export class BinanceModel extends ExchangeModel {
 
   parseSymbolData(symbolData: BinanceSymbolData): SymbolData {
     return {
-      exchange: this.constructor.name,
+      exchange: this.constructor.name.replace('Model', ''),
       symbol: symbolData.symbol,
       base: symbolData.baseAsset,
       quote: symbolData.quoteAsset,
@@ -97,7 +97,10 @@ export class BinanceModel extends ExchangeModel {
     tickersData.map((tickerData: BinanceTicker) => {
       const { s, a, A, b, B } = tickerData
 
-      this.ensureTicker({ exchange: this.constructor.name, symbol: s })
+      this.ensureTicker({
+        exchange: this.constructor.name.replace('Model', ''),
+        symbol: s,
+      })
 
       this.updateTickerData({
         symbol: s,

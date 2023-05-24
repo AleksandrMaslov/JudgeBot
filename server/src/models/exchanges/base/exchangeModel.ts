@@ -3,6 +3,7 @@ import WebSocket from 'ws'
 
 import { SymbolData, TickerUpdate } from '../../../types'
 import { Ticker } from '../../ticker.js'
+import { TradeCase } from '../../tradeCase.js'
 
 export class ExchangeModel {
   public tickers: any
@@ -33,12 +34,12 @@ export class ExchangeModel {
   }
 
   // PUBLIC METHODS
-  public getCasesWith(exchange: ExchangeModel, asset: string): Ticker[][] {
+  public getCasesWith(exchange: ExchangeModel, asset: string): TradeCase[] {
     const currentBasedTickers = this.getBasedTickers(asset)
     const exchangeBasedTickers = exchange.getBasedTickers(asset)
 
     const tickers = [currentBasedTickers, exchangeBasedTickers]
-    return this.defineTradeablePairs(tickers)
+    return this.getTradeCases(tickers)
   }
 
   // ABSTRACT INTERNAL METHODS
@@ -161,20 +162,20 @@ export class ExchangeModel {
   }
 
   // TRADING UTILS
-  private defineTradeablePairs(unorderedTickers: any[]): any[][] {
+  private getTradeCases(unorderedTickers: any[]): TradeCase[] {
     const orderedTickers = this.getOrderedTickers(unorderedTickers)
     const [baseTickers, pairTickers] = orderedTickers
 
-    const tradePairs = []
+    const tradeCases = []
     for (const pair of Object.entries<Ticker>(baseTickers)) {
       const [pairAsset, ticker] = pair
       const pairTicker: Ticker = pairTickers[pairAsset]
 
       if (!pairTicker) continue
-      tradePairs.push([pairAsset, ticker, pairTicker])
+      tradeCases.push(new TradeCase(pairAsset, ticker, pairTicker))
     }
 
-    return tradePairs
+    return tradeCases
   }
 
   private getOrderedTickers(tickers: any[]): any[] {
@@ -219,7 +220,7 @@ export class ExchangeModel {
     const { symbol } = symbolData
     if (this.tickers[symbol]) return
     this.tickers[symbol] = new Ticker({
-      exchange: this.constructor.name,
+      exchange: this.constructor.name.replace('Model', ''),
       symbol: symbol,
     })
   }
