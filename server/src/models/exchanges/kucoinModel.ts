@@ -57,6 +57,7 @@ export class KucoinModel extends ExchangeModel {
 
   parseSymbolData(symbolData: KucoinSymbolData): SymbolData {
     return {
+      exchange: this.constructor.name,
       symbol: symbolData.symbol,
       base: symbolData.baseCurrency,
       quote: symbolData.quoteCurrency,
@@ -135,7 +136,7 @@ export class KucoinModel extends ExchangeModel {
       data: { bestAsk, bestAskSize, bestBid, bestBidSize },
     } = tickerData
 
-    this.ensureTicker({ symbol: subject })
+    this.ensureTicker({ exchange: this.constructor.name, symbol: subject })
 
     this.updateTickerData({
       symbol: subject,

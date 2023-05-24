@@ -33,26 +33,12 @@ export class ExchangeModel {
   }
 
   // PUBLIC METHODS
-  public getTradeablePairsWith(exchange: ExchangeModel, asset: string): void {
+  public getCasesWith(exchange: ExchangeModel, asset: string): Ticker[][] {
     const currentBasedTickers = this.getBasedTickers(asset)
     const exchangeBasedTickers = exchange.getBasedTickers(asset)
 
-    const currentLength = Object.keys(currentBasedTickers).length
-    const exchangeLength = Object.keys(exchangeBasedTickers).length
-
-    console.log(currentLength, exchangeLength)
-
-    let pairs: Ticker[][]
-    if (currentLength < exchangeLength)
-      pairs = this.defineTradeablePairs(
-        currentBasedTickers,
-        exchangeBasedTickers
-      )
-    else
-      pairs = this.defineTradeablePairs(
-        exchangeBasedTickers,
-        currentBasedTickers
-      )
+    const tickers = [currentBasedTickers, exchangeBasedTickers]
+    return this.defineTradeablePairs(tickers)
   }
 
   // ABSTRACT INTERNAL METHODS
@@ -175,16 +161,48 @@ export class ExchangeModel {
   }
 
   // TRADING UTILS
+  private defineTradeablePairs(unorderedTickers: any[]): any[][] {
+    const orderedTickers = this.getOrderedTickers(unorderedTickers)
+    const [baseTickers, pairTickers] = orderedTickers
+
+    const tradePairs = []
+    for (const pair of Object.entries<Ticker>(baseTickers)) {
+      const [pairAsset, ticker] = pair
+      const pairTicker: Ticker = pairTickers[pairAsset]
+
+      if (!pairTicker) continue
+      tradePairs.push([pairAsset, ticker, pairTicker])
+    }
+
+    return tradePairs
+  }
+
+  private getOrderedTickers(tickers: any[]): any[] {
+    return tickers.sort((a, b) => {
+      const currentLength = Object.keys(a).length
+      const exchangeLength = Object.keys(b).length
+      console.log(currentLength, exchangeLength)
+      return currentLength > exchangeLength ? 1 : -1
+    })
+  }
+
   private getBasedTickers(asset: string): {} {
-    let tickers: any = {}
+    let tickers: any = { exchange: this.constructor.name }
+
     for (const pair of Object.entries<Ticker>(this.tickers)) {
       const [symbol, ticker] = pair
 
       if (!symbol.includes(asset)) continue
+      if (symbol.includes('BTCUP')) continue
+      if (symbol.includes('BTCDOWN')) continue
+      if (symbol.includes('ETHUP')) continue
+      if (symbol.includes('ETHDOWN')) continue
+
       if (!ticker.askPrice) continue
       // if (!ticker.askQty) continue
       if (!ticker.bidPrice) continue
       // if (!ticker.bidQty) continue
+
       if (ticker.askPrice === 0) continue
       if (ticker.askQty === 0) continue
       if (ticker.bidPrice === 0) continue
@@ -196,54 +214,14 @@ export class ExchangeModel {
     return tickers
   }
 
-  private defineTradeablePairs(baseTickers: any, tickers: any): Ticker[][] {
-    const tradePairs = []
-    const spreads = []
-
-    for (const pair of Object.entries<Ticker>(baseTickers)) {
-      const [pairAsset, ticker] = pair
-      if (!tickers[pairAsset]) continue
-
-      const pairTicker: Ticker = tickers[pairAsset]
-      tradePairs.push([ticker, pairTicker])
-
-      let spreadA: number
-      let spreadB: number
-      let proffitA: number
-      let proffitB: number
-      if (ticker.base === pairTicker.base) {
-        spreadA = ticker.askPrice! - pairTicker.bidPrice!
-        proffitA = parseFloat(((spreadA * 100) / ticker.askPrice!).toFixed(2))
-        spreadB = pairTicker.askPrice! - ticker.bidPrice!
-        proffitB = parseFloat(
-          ((spreadB * 100) / pairTicker.askPrice!).toFixed(2)
-        )
-      } else {
-        console.log('different!', ticker.base, pairTicker.base)
-        // FIX
-        spreadA = ticker.askPrice! - pairTicker.bidPrice!
-        proffitA = parseFloat(((spreadA * 100) / ticker.askPrice!).toFixed(2))
-        spreadB = pairTicker.askPrice! - ticker.bidPrice!
-        proffitB = parseFloat(
-          ((spreadB * 100) / pairTicker.askPrice!).toFixed(2)
-        )
-      }
-
-      if (proffitA > 2 || proffitB > 2)
-        spreads.push([pairAsset, proffitA, proffitB])
-    }
-
-    console.log(spreads.length)
-    console.log(spreads)
-
-    return tradePairs
-  }
-
   // INTERNAL UTILS
   ensureTicker(symbolData: SymbolData | TickerUpdate): void {
     const { symbol } = symbolData
     if (this.tickers[symbol]) return
-    this.tickers[symbol] = new Ticker({ symbol: symbol })
+    this.tickers[symbol] = new Ticker({
+      exchange: this.constructor.name,
+      symbol: symbol,
+    })
   }
 
   updateTickerData(tickerData: TickerUpdate) {
