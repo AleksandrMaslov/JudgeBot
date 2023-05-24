@@ -1,7 +1,5 @@
-import { ExchangeModel } from '../models/exchanges/base/exchangeModel.js'
 import { BinanceModel } from '../models/exchanges/binanceModel.js'
 import { KucoinModel } from '../models/exchanges/kucoinModel.js'
-import { Ticker } from '../models/ticker.js'
 
 export class Controller {
   private binance: BinanceModel
