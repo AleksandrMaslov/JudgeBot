@@ -1,6 +1,5 @@
 import { BinanceModel } from '../models/exchanges/binanceModel.js'
 import { KucoinModel } from '../models/exchanges/kucoinModel.js'
-import { TradeCase } from '../models/tradeCase.js'
 
 export class Controller {
   private binance: BinanceModel
@@ -17,7 +16,7 @@ export class Controller {
     }, timer)
   }
 
-  private process() {
+  private process(): void {
     const asset = 'USDT'
     const cases = this.binance.getCasesWith(this.kucoin, asset)
 
