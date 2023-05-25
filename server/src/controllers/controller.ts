@@ -1,5 +1,6 @@
 import { BinanceModel } from '../models/exchanges/binanceModel.js'
 import { KucoinModel } from '../models/exchanges/kucoinModel.js'
+import { TradeCase } from '../models/tradeCase.js'
 
 export class Controller {
   private binance: BinanceModel
@@ -17,13 +18,22 @@ export class Controller {
   }
 
   private process(): void {
-    const asset = 'USDT'
-    const cases = this.binance.getCasesWith(this.kucoin, asset)
+    // ALL
+    // this.binance.getCasesWith(this.kucoin)
 
+    // BY ASSET
+    const asset = 'ETH'
+    const cases = this.binance.getCasesWithAsset(this.kucoin, asset)
+    this.logCases(cases)
+  }
+
+  private logCases(cases: TradeCase[]): void {
     for (const tradeCase of cases) {
       const { proffit } = tradeCase
-      if (proffit! > 1 && proffit! < 100) tradeCase.log()
+      if (proffit! < 1) continue
+      if (proffit! > 50) continue
+      tradeCase.log()
     }
-    console.log('\n')
+    console.log()
   }
 }
