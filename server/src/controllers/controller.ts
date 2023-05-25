@@ -22,7 +22,7 @@ export class Controller {
     // this.binance.getCasesWith(this.kucoin)
 
     // BY ASSET
-    const asset = 'ETH'
+    const asset = 'USDT'
     const cases = this.binance.getCasesWithAsset(this.kucoin, asset)
     this.logCases(cases)
   }
