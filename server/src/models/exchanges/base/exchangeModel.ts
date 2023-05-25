@@ -34,10 +34,34 @@ export class ExchangeModel {
   }
 
   // PUBLIC METHODS
-  public getCasesWith(exchange: ExchangeModel, asset: string): TradeCase[] {
+  public getCasesWith(exchange: ExchangeModel): void {
+    const assets = new Set([
+      ...Object.values(this.tickers).map((t: any) => t.base),
+      ...Object.values(this.tickers).map((t: any) => t.quote),
+      ...Object.values(exchange.tickers).map((t: any) => t.base),
+      ...Object.values(exchange.tickers).map((t: any) => t.quote),
+    ])
+    const assetsArray = Array.from(assets)
+
+    while (assetsArray.length !== 0) {
+      const asset = assetsArray.pop()
+      const cases = this.getCasesWithAsset(exchange, asset)
+      for (const tradeCase of cases) {
+        const { proffit } = tradeCase
+        if (proffit! < 1) continue
+        if (proffit! > 50) continue
+        tradeCase.log()
+      }
+    }
+    console.log()
+  }
+
+  public getCasesWithAsset(
+    exchange: ExchangeModel,
+    asset: string
+  ): TradeCase[] {
     const currentBasedTickers = this.getBasedTickers(asset)
     const exchangeBasedTickers = exchange.getBasedTickers(asset)
-
     const tickers = [currentBasedTickers, exchangeBasedTickers]
     return this.getTradeCases(tickers)
   }
