@@ -23,7 +23,7 @@ export class Controller {
 
     for (const tradeCase of cases) {
       const { proffit } = tradeCase
-      if (proffit! > 1) tradeCase.log()
+      if (proffit! > 1 && proffit! < 100) tradeCase.log()
     }
     console.log('\n')
   }
