@@ -6,9 +6,8 @@ export class ExchangeModel extends ConnectableModel {
   constructor() {
     super()
 
-    if (this.constructor == ExchangeModel) {
+    if (this.constructor == ExchangeModel)
       throw new Error("Abstract classes can't be instantiated.")
-    }
   }
 
   public getCasesWith(exchange: ExchangeModel): void {

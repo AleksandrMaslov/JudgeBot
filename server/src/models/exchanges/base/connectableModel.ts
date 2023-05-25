@@ -27,9 +27,8 @@ export class ConnectableModel {
     this.senderPrefix = ''
     this.isDebugMode = false
 
-    if (this.constructor == ConnectableModel) {
+    if (this.constructor == ConnectableModel)
       throw new Error("Abstract classes can't be instantiated.")
-    }
   }
 
   // ABSTRACT INTERNAL METHODS
