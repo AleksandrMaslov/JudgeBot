@@ -2,8 +2,8 @@ import axios from 'axios'
 import WebSocket from 'ws'
 
 import { SymbolData, TickerUpdate } from '../../../types'
-import { Ticker } from '../../ticker.js'
 import { TradeCase } from '../../tradeCase.js'
+import { Ticker } from '../../ticker.js'
 
 export class ExchangeModel {
   public tickers: any
@@ -179,12 +179,9 @@ export class ExchangeModel {
   }
 
   private getOrderedTickers(tickers: any[]): any[] {
-    return tickers.sort((a, b) => {
-      const currentLength = Object.keys(a).length
-      const exchangeLength = Object.keys(b).length
-      console.log(currentLength, exchangeLength)
-      return currentLength > exchangeLength ? 1 : -1
-    })
+    return tickers.sort((a, b) =>
+      Object.keys(a).length > Object.keys(b).length ? 1 : -1
+    )
   }
 
   private getBasedTickers(asset: string): {} {
