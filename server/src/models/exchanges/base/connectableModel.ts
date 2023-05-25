@@ -151,8 +151,8 @@ export class ConnectableModel {
   }
 
   // INTERNAL UTILS
-  ensureTicker(symbolData: SymbolData | TickerUpdate): void {
-    const { symbol } = symbolData
+  ensureTicker(data: SymbolData | TickerUpdate): void {
+    const { symbol } = data
     if (this.tickers[symbol]) return
     this.tickers[symbol] = new Ticker({
       exchange: this.constructor.name.replace('Model', ''),
