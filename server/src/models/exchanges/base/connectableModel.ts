@@ -84,7 +84,7 @@ export class ConnectableModel {
       .then((response) => {
         const rawSymbolsData = this.parseSymbolsResponse(response)
 
-        rawSymbolsData.map((rawSymbolData: any) => {
+        rawSymbolsData.forEach((rawSymbolData: any) => {
           const symbolData = this.parseSymbolData(rawSymbolData)
           this.ensureTicker(symbolData)
           this.updateSymbolData(symbolData)
@@ -103,7 +103,7 @@ export class ConnectableModel {
       .then((response) => {
         const rawTickersData = this.parseTickersResponse(response)
 
-        rawTickersData.map((rawTickerData: any) => {
+        rawTickersData.forEach((rawTickerData: any) => {
           const tickerData = this.parseTickerData(rawTickerData)
           this.ensureTicker(tickerData)
           this.updateTickerData(tickerData)
