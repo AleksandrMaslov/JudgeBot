@@ -1,6 +1,7 @@
 import { ConnectableModel } from './connectableModel.js'
 import { TradeCase } from '../../tradeCase.js'
 import { Ticker } from '../../ticker.js'
+import { TriangleCase } from '../../triangleCase.js'
 
 export class ExchangeModel extends ConnectableModel {
   constructor() {
@@ -10,26 +11,42 @@ export class ExchangeModel extends ConnectableModel {
       throw new Error("Abstract classes can't be instantiated.")
   }
 
-  public getCasesWith(exchange: ExchangeModel): void {
-    const assets = new Set([
-      ...Object.values(this.tickers).map((t: any) => t.base),
-      ...Object.values(this.tickers).map((t: any) => t.quote),
-      ...Object.values(exchange.tickers).map((t: any) => t.base),
-      ...Object.values(exchange.tickers).map((t: any) => t.quote),
-    ])
-    const assetsArray = Array.from(assets)
+  public getSelfCases(): TradeCase[] {
+    const assets = this.getAssets()
+    console.log('START')
 
-    while (assetsArray.length !== 0) {
-      const asset = assetsArray.pop()
-      const cases = this.getCasesWithAsset(exchange, asset)
-      for (const tradeCase of cases) {
-        const { proffit } = tradeCase
-        if (proffit! < 1) continue
-        if (proffit! > 50) continue
-        tradeCase.log()
+    let cases: any = []
+    for (const assetA of assets) {
+      for (const assetB of assets) {
+        if (assetA == assetB) continue
+
+        for (const assetC of assets) {
+          if (assetB == assetC) continue
+          if (assetC == assetA) continue
+
+          const tickersA: any = this.getBasedTickers(assetA)
+          if (!tickersA[assetB]) continue
+
+          const tickersB: any = this.getBasedTickers(assetB)
+          if (!tickersB[assetC]) continue
+
+          const tickersC: any = this.getBasedTickers(assetC)
+          if (!tickersC[assetA]) continue
+
+          const tradeCase = new TriangleCase(
+            assetA,
+            tickersA[assetB],
+            tickersB[assetC],
+            tickersC[assetA]
+          )
+          // TOO LONG
+        }
       }
+      console.log('A')
     }
-    console.log()
+
+    console.log(cases.length)
+    return cases
   }
 
   public getCasesWithAsset(
@@ -40,6 +57,33 @@ export class ExchangeModel extends ConnectableModel {
     const exchangeBasedTickers = exchange.getBasedTickers(asset)
     const tickers = [currentBasedTickers, exchangeBasedTickers]
     return this.getTradeCases(tickers)
+  }
+
+  public showAllCasesWith(exchange: ExchangeModel): void {
+    const assets = Array.from(
+      new Set([...this.getAssets(), ...exchange.getAssets()])
+    )
+
+    while (assets.length !== 0) {
+      const asset = assets.pop()
+      const cases = this.getCasesWithAsset(exchange, asset!)
+      for (const tradeCase of cases) {
+        const { proffit } = tradeCase
+        if (proffit! < 1) continue
+        if (proffit! > 50) continue
+        tradeCase.log()
+      }
+    }
+    console.log()
+  }
+
+  private getAssets(): string[] {
+    return Array.from(
+      new Set([
+        ...Object.values(this.tickers).map((t: any) => t.base),
+        ...Object.values(this.tickers).map((t: any) => t.quote),
+      ])
+    )
   }
 
   private getTradeCases(unorderedTickers: any[]): TradeCase[] {

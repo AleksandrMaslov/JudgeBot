@@ -17,11 +17,7 @@ export class Controller {
     }, timer)
   }
 
-  private process(): void {
-    // ALL
-    // this.binance.getCasesWith(this.kucoin)
-
-    // BY ASSET
+  public process(): void {
     const asset = 'USDT'
     const cases = this.binance.getCasesWithAsset(this.kucoin, asset)
     this.logCases(cases)
