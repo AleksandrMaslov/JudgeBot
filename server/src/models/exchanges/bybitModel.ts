@@ -1,3 +1,5 @@
+import { WebSocket } from 'ws'
+
 import { ExchangeModel } from './base/exchangeModel.js'
 import {
   BybitTickerResponse,
@@ -5,7 +7,6 @@ import {
   BybitTicker,
   TickerUpdate,
 } from '../../types'
-import { WebSocket } from 'ws'
 
 export class BybitModel extends ExchangeModel {
   private pingTimer: number
@@ -93,7 +94,7 @@ export class BybitModel extends ExchangeModel {
           args: slice,
         })
       )
-      await this.delay(300)
+      await this.delay(500)
     }
   }
 
