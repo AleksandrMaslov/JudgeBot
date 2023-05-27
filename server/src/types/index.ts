@@ -16,3 +16,7 @@ export { KucoinTicker } from './kucoin/ticker'
 export { BybitTickerResponse } from './bybit/tickerResponse'
 export { BybitTickerData } from './bybit/tickerData'
 export { BybitTicker } from './bybit/ticker'
+
+export { OkxTickerResponse } from './okx/tickerResponse'
+export { OkxTickerData } from './okx/tickerData'
+export { OkxTicker } from './okx/ticker'
