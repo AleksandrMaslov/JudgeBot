@@ -1,3 +1,4 @@
+import { WebSocket } from 'ws'
 import { ExchangeModel } from '../models/exchanges/base/exchangeModel.js'
 import { BinanceModel } from '../models/exchanges/binanceModel.js'
 import { BybitModel } from '../models/exchanges/bybitModel.js'
@@ -22,8 +23,8 @@ export class Controller {
 
     this.exchanges.forEach((exchange) => {
       console.log(
-        `${exchange.constructor.name}(${
-          exchange.socket?.readyState
+        `${exchange.constructor.name} (${
+          exchange.socket?.readyState === 1 ? '- Online -' : '- Offline -'
         }) - Symbols: ${Object.keys(exchange.tickers).length}`
       )
     })
