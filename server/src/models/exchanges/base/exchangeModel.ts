@@ -56,7 +56,7 @@ export class ExchangeModel extends ConnectableModel {
     const currentBasedTickers = this.getBasedTickers(asset)
     const exchangeBasedTickers = exchange.getBasedTickers(asset)
     const tickers = [currentBasedTickers, exchangeBasedTickers]
-    return this.getTradeCases(tickers)
+    return this.getTradeCases(asset, tickers)
   }
 
   public showAllCasesWith(exchange: ExchangeModel): void {
@@ -86,7 +86,7 @@ export class ExchangeModel extends ConnectableModel {
     )
   }
 
-  private getTradeCases(unorderedTickers: any[]): TradeCase[] {
+  private getTradeCases(asset: string, unorderedTickers: any[]): TradeCase[] {
     const orderedTickers = this.getOrderedTickers(unorderedTickers)
     const [baseTickers, pairTickers] = orderedTickers
 
@@ -96,7 +96,7 @@ export class ExchangeModel extends ConnectableModel {
       const pairTicker: Ticker = pairTickers[pairAsset]
 
       if (!pairTicker) continue
-      tradeCases.push(new TradeCase(pairAsset, ticker, pairTicker))
+      tradeCases.push(new TradeCase(asset, pairAsset, ticker, pairTicker))
     }
 
     return tradeCases
