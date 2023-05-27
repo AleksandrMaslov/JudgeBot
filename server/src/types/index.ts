@@ -12,3 +12,7 @@ export { KucoinSymbolData } from './kucoin/symbolData'
 export { KucoinTickerResponse } from './kucoin/tickerResponse'
 export { KucoinTickerData } from './kucoin/tickerData'
 export { KucoinTicker } from './kucoin/ticker'
+
+export { BybitTickerResponse } from './bybit/tickerResponse'
+export { BybitTickerData } from './bybit/tickerData'
+export { BybitTicker } from './bybit/ticker'

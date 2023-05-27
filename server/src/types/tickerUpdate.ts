@@ -1,7 +1,7 @@
 export type TickerUpdate = {
   symbol: string
-  askPrice: number
+  askPrice: number | undefined
   askQty: number | undefined
-  bidPrice: number
+  bidPrice: number | undefined
   bidQty: number | undefined
 }
