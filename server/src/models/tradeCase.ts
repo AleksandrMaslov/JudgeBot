@@ -48,16 +48,6 @@ export class TradeCase {
           this.tickerB.symbol.endsWith(this.pairAsset))
       )
     ) {
-      // console.log(
-      //   'Reversed:',
-      //   this.tickerA.exchange,
-      //   this.tickerA.base,
-      //   this.tickerA.quote,
-      //   this.tickerB.exchange,
-      //   this.tickerB.base,
-      //   this.tickerB.quote
-      // )
-
       this.calculateReverseProffit(this.tickerA, this.tickerB)
       if (this.proffit! > 0) return
 

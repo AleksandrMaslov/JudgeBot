@@ -115,9 +115,7 @@ export class ConnectableModel {
   }
 
   private updateSymbolData(symbolData: SymbolData) {
-    const { symbol, base, quote } = symbolData
-    this.tickers[symbol].base = base
-    this.tickers[symbol].quote = quote
+    const { symbol } = symbolData
   }
 
   // WS CONNECTION

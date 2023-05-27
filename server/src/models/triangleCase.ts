@@ -1,7 +1,7 @@
 import { Ticker } from './ticker'
 
 export class TriangleCase {
-  public baseAsset?: string
+  public baseAsset: string
 
   public proffit?: number
 
@@ -39,7 +39,14 @@ export class TriangleCase {
   // }
 
   private analize() {
-    if (this.tickerA.base !== this.tickerB.base) {
+    if (
+      !(
+        (this.tickerA.symbol.startsWith(this.baseAsset!) &&
+          this.tickerB.symbol.startsWith(this.baseAsset!)) ||
+        (this.tickerA.symbol.endsWith(this.baseAsset!) &&
+          this.tickerB.symbol.endsWith(this.baseAsset!))
+      )
+    ) {
       // console.log(
       //   'Reversed:',
       //   this.tickerA.exchange,

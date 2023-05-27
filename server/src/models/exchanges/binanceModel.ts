@@ -45,8 +45,6 @@ export class BinanceModel extends ExchangeModel {
     return {
       exchange: this.constructor.name.replace('Model', ''),
       symbol: symbolData.symbol,
-      base: symbolData.baseAsset,
-      quote: symbolData.quoteAsset,
     }
   }
 

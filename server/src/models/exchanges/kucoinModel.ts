@@ -59,8 +59,6 @@ export class KucoinModel extends ExchangeModel {
     return {
       exchange: this.constructor.name.replace('Model', ''),
       symbol: symbolData.symbol,
-      base: symbolData.baseCurrency,
-      quote: symbolData.quoteCurrency,
     }
   }
 
