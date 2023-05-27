@@ -1,4 +1,3 @@
-import { WebSocket } from 'ws'
 import { ExchangeModel } from '../models/exchanges/base/exchangeModel.js'
 import { BinanceModel } from '../models/exchanges/binanceModel.js'
 import { BybitModel } from '../models/exchanges/bybitModel.js'
@@ -19,16 +18,14 @@ export class Controller {
   }
 
   public process(): void {
-    const asset = 'USDT'
+    this.logExchanges()
 
-    this.exchanges.forEach((exchange) => {
-      console.log(
-        `${exchange.constructor.name} (${
-          exchange.socket?.readyState === 1 ? '- Online -' : '- Offline -'
-        }) - Symbols: ${Object.keys(exchange.tickers).length}`
-      )
-    })
+    const cases = this.getAllCasesWithAsset('USDT')
 
+    this.logCases(cases)
+  }
+
+  private getAllCasesWithAsset(asset: string): TradeCase[] {
     let cases: TradeCase[] = []
     let list = Array.from(this.exchanges)
 
@@ -42,8 +39,17 @@ export class Controller {
         ]
       })
     }
+    return cases
+  }
 
-    this.logCases(cases)
+  private logExchanges(): void {
+    this.exchanges.forEach((exchange) => {
+      console.log(
+        `${exchange.constructor.name} (${
+          exchange.socket?.readyState === 1 ? '- Online -' : '- Offline -'
+        }) - Symbols: ${Object.keys(exchange.tickers).length}`
+      )
+    })
   }
 
   private logCases(cases: TradeCase[]): void {
