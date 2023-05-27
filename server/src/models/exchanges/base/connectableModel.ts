@@ -7,8 +7,8 @@ import { Ticker } from '../../ticker.js'
 export class ConnectableModel {
   public tickers: any
 
-  symbolsUrl: string
-  tickersUrl: string
+  symbolsUrl: string | undefined
+  tickersUrl: string | undefined
   wsConnectionUrl: string
   tickersTopic: string
 
@@ -19,8 +19,8 @@ export class ConnectableModel {
   constructor() {
     this.tickers = {}
 
-    this.symbolsUrl = ''
-    this.tickersUrl = ''
+    this.symbolsUrl = undefined
+    this.tickersUrl = undefined
     this.wsConnectionUrl = ''
     this.tickersTopic = ''
 
@@ -78,6 +78,8 @@ export class ConnectableModel {
 
   // GET TICKERS
   private async getTickersList(): Promise<void> {
+    if (!this.symbolsUrl) return
+
     await axios
       .get(this.symbolsUrl)
 
@@ -97,6 +99,8 @@ export class ConnectableModel {
   }
 
   private async getTickersData(): Promise<void> {
+    if (!this.tickersUrl) return
+
     await axios
       .get(this.tickersUrl)
 
