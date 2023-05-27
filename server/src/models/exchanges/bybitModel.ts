@@ -73,9 +73,16 @@ export class BybitModel extends ExchangeModel {
 
   async subscribeAllTickers(): Promise<void> {
     const step = 10
-    const symbols = Object.keys(this.tickers)
+    let symbols = Object.keys(this.tickers)
+    let total = symbols.length
+
+    while (total === 0) {
+      await this.delay(1000)
+      symbols = Object.keys(this.tickers)
+      total = symbols.length
+    }
+
     const args = symbols.map((s) => `${this.tickersTopic}${s}`)
-    const total = args.length
 
     for (let i = 0; i < total; i += step) {
       const slice = args.slice(i, i + step)
@@ -86,8 +93,7 @@ export class BybitModel extends ExchangeModel {
           args: slice,
         })
       )
-
-      await this.delay(500)
+      await this.delay(200)
     }
   }
 
