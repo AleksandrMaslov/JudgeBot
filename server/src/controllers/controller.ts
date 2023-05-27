@@ -57,10 +57,12 @@ export class Controller {
   }
 
   private logCases(cases: TradeCase[]): void {
+    console.log()
     cases
       .filter((c) => c.proffit! > 1 && c.proffit! < 50)
       .sort((a, b) => b.proffit! - a.proffit!)
       .forEach((c) => c.log())
+    console.log()
     console.log()
   }
 }
