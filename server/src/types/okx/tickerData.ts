@@ -1,0 +1,18 @@
+export type OkxTickerData = {
+  instId: string //'LTC-USD-SWAP'
+  askPx: string //'9999.99'
+  askSz: string //'11'
+  bidPx: string //'8888.88'
+  bidSz: string //'5'
+  // instType: 'SWAP'
+  // last: '9999.99'
+  // lastSz: '0.1'
+  // open24h: '9000'
+  // high24h: '10000'
+  // low24h: '8888.88'
+  // volCcy24h: '2222'
+  // vol24h: '2222'
+  // sodUtc0: '0.1'
+  // sodUtc8: '0.1'
+  // ts: '1597026383085'
+}
