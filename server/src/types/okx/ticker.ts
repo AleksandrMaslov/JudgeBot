@@ -1,18 +1,26 @@
 export type OkxTicker = {
-  instId: string //'LTC-USDT'
-  askPx: string //'88.69'
-  askSz: string //'241.850988'
-  bidPx: string //'88.67'
-  bidSz: string //'35.210129'
-  // instType: 'SPOT',
-  // last: '88.68',
-  // lastSz: '5.636291',
-  // open24h: '87.74',
-  // high24h: '88.71',
-  // low24h: '86.9',
-  // sodUtc0: '87.07',
-  // sodUtc8: '87.84',
-  // volCcy24h: '11577376.42852736',
-  // vol24h: '131011.930025',
-  // ts: '1685220619111'
+  data: [
+    {
+      instId: string //'SLP-USDT',
+      askPx: string //'0.00217',
+      askSz: string //'115687.58341',
+      bidPx: string //'0.00216',
+      bidSz: string //'788635.984393',
+      // instType: 'SPOT',
+      // last: '0.00216',
+      // lastSz: '1443',
+      // open24h: '0.00218',
+      // high24h: '0.00218',
+      // low24h: '0.00214',
+      // sodUtc0: '0.00216',
+      // sodUtc8: '0.00216',
+      // volCcy24h: '37636.62973820859',
+      // vol24h: '17307638.455064',
+      // ts: '1685222146710'
+    }
+  ]
+  // arg: {
+  //   channel: string //'tickers',
+  //   instId: string //'SLP-USDT'
+  // }
 }
