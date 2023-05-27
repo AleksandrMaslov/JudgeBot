@@ -1,9 +1,9 @@
 export type OkxTicker = {
-  instId: 'LTC-USDT'
-  askPx: '88.69'
-  askSz: '241.850988'
-  bidPx: '88.67'
-  bidSz: '35.210129'
+  instId: string //'LTC-USDT'
+  askPx: string //'88.69'
+  askSz: string //'241.850988'
+  bidPx: string //'88.67'
+  bidSz: string //'35.210129'
   // instType: 'SPOT',
   // last: '88.68',
   // lastSz: '5.636291',
