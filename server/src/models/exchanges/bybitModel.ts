@@ -15,7 +15,6 @@ export class BybitModel extends ExchangeModel {
   constructor() {
     super()
 
-    this.symbolsUrl = ''
     this.tickersUrl = 'https://api.bybit.com/v5/market/tickers?category=spot'
     this.wsConnectionUrl = 'wss://stream.bybit.com/v5/public/spot'
     this.tickersTopic = 'orderbook.1.'
