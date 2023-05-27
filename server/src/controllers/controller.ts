@@ -2,13 +2,19 @@ import { ExchangeModel } from '../models/exchanges/base/exchangeModel.js'
 import { BinanceModel } from '../models/exchanges/binanceModel.js'
 import { BybitModel } from '../models/exchanges/bybitModel.js'
 import { KucoinModel } from '../models/exchanges/kucoinModel.js'
+import { OkxModel } from '../models/exchanges/okxModel.js'
 import { TradeCase } from '../models/tradeCase.js'
 
 export class Controller {
   private exchanges: ExchangeModel[]
 
   constructor() {
-    this.exchanges = [new BinanceModel(), new KucoinModel(), new BybitModel()]
+    this.exchanges = [
+      new BinanceModel(),
+      new KucoinModel(),
+      new BybitModel(),
+      new OkxModel(),
+    ]
   }
 
   public refresh(timer: number): NodeJS.Timer {
@@ -19,9 +25,7 @@ export class Controller {
 
   public process(): void {
     this.logExchanges()
-
     const cases = this.getAllCasesWithAsset('USDT')
-
     this.logCases(cases)
   }
 
