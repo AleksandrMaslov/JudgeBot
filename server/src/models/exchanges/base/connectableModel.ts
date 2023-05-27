@@ -163,11 +163,11 @@ export class ConnectableModel {
   updateTickerData(tickerData: TickerUpdate) {
     const { symbol, askPrice, askQty, bidPrice, bidQty } = tickerData
 
-    this.tickers[symbol].askPrice = askPrice
-    this.tickers[symbol].askQty = askQty
+    if (askPrice) this.tickers[symbol].askPrice = askPrice
+    if (askQty) this.tickers[symbol].askQty = askQty
 
-    this.tickers[symbol].bidPrice = bidPrice
-    this.tickers[symbol].bidQty = bidQty
+    if (bidPrice) this.tickers[symbol].bidPrice = bidPrice
+    if (bidQty) this.tickers[symbol].bidQty = bidQty
   }
 
   // LOGGING
