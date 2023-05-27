@@ -93,7 +93,7 @@ export class BybitModel extends ExchangeModel {
           args: slice,
         })
       )
-      await this.delay(200)
+      await this.delay(300)
     }
   }
 
