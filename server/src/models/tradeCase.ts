@@ -1,7 +1,7 @@
 import { Ticker } from './ticker'
 
 export class TradeCase {
-  public baseAsset?: string
+  public baseAsset: string
   public pairAsset: string
 
   public proffit?: number
@@ -12,8 +12,13 @@ export class TradeCase {
   public tickerA: Ticker
   public tickerB: Ticker
 
-  constructor(pairAsset: string, tickerA: Ticker, tickerB: Ticker) {
-    this.baseAsset = tickerA.base === pairAsset ? tickerA.quote : tickerA.base
+  constructor(
+    baseAsset: string,
+    pairAsset: string,
+    tickerA: Ticker,
+    tickerB: Ticker
+  ) {
+    this.baseAsset = baseAsset
     this.pairAsset = pairAsset
 
     this.tickerA = tickerA
@@ -35,7 +40,14 @@ export class TradeCase {
   }
 
   private analize() {
-    if (this.tickerA.base !== this.tickerB.base) {
+    if (
+      !(
+        (this.tickerA.symbol.startsWith(this.pairAsset) &&
+          this.tickerB.symbol.startsWith(this.pairAsset)) ||
+        (this.tickerA.symbol.endsWith(this.pairAsset) &&
+          this.tickerB.symbol.endsWith(this.pairAsset))
+      )
+    ) {
       // console.log(
       //   'Reversed:',
       //   this.tickerA.exchange,
