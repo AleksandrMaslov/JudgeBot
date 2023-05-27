@@ -1,0 +1,15 @@
+export type BybitTickerData = {
+  symbol: string //'BTCUSDT'
+  bid1Price: string //'20517.96'
+  bid1Size: string //'2'
+  ask1Price: string //'20527.77'
+  ask1Size: string //'1.862172'
+  lastPrice: string //'20533.13'
+  prevPrice24h: string //'20393.48'
+  price24hPcnt: string //'0.0068'
+  highPrice24h: string //'21128.12'
+  lowPrice24h: string //'20318.89'
+  turnover24h: string //'243765620.65899866'
+  volume24h: string //'11801.27771'
+  usdIndexPrice: string //'20784.12009279'
+}
