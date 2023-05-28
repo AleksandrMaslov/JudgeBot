@@ -1,0 +1,18 @@
+export type OkcoinTickerData = {
+  instId: string //'BTC-USD'
+  askPx: string //'16849.01'
+  askSz: string //'0.0401'
+  bidPx: string //'16848.15'
+  bidSz: string //'0.017'
+  // instType: string //'SPOT'
+  // last: string //'16848.15'
+  // lastSz: string //'0.0005'
+  // open24h: string //'16761.08'
+  // high24h: string //'16943.44'
+  // low24h: string //'16629.04'
+  // volCcy24h: string //'2993092.015'
+  // vol24h: string //'178.2431'
+  // ts: string //'1672841403093'
+  // sodUtc0: string //'16688.74'
+  // sodUtc8: string //'16700.35'
+}

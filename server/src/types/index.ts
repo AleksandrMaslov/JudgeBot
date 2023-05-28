@@ -17,6 +17,10 @@ export { BybitTickerResponse } from './bybit/tickerResponse'
 export { BybitTickerData } from './bybit/tickerData'
 export { BybitTicker } from './bybit/ticker'
 
+export { OkcoinTickerResponse } from './okcoin/tickerResponse'
+export { OkcoinTickerData } from './okcoin/tickerData'
+export { OkcoinTicker } from './okcoin/ticker'
+
 export { OkxTickerResponse } from './okx/tickerResponse'
 export { OkxTickerData } from './okx/tickerData'
 export { OkxTicker } from './okx/ticker'
