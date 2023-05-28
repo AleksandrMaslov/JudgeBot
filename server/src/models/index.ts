@@ -7,6 +7,7 @@ export { ExchangeModel } from './exchanges/base/exchangeModel.js'
 
 export { BinanceModel } from './exchanges/binanceModel.js'
 export { BybitModel } from './exchanges/bybitModel.js'
+export { ExmoModel } from './exchanges/exmoModel.js'
 export { KucoinModel } from './exchanges/kucoinModel.js'
 export { OkcoinModel } from './exchanges/okcoinModel.js'
 export { OkxModel } from './exchanges/okxModel.js'
