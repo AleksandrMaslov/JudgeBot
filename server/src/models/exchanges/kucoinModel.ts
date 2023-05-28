@@ -139,6 +139,8 @@ export class KucoinModel extends ExchangeModel {
       bidPrice: parseFloat(bestBid),
       bidQty: parseFloat(bestBidSize),
     })
+
+    this.updated++
   }
 
   // PRIVATE METHODS

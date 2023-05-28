@@ -1,6 +1,6 @@
 import { ConnectableModel } from './connectableModel.js'
-import { TradeCase } from '../../tradeCase.js'
 import { Ticker } from '../../ticker.js'
+import { TradeCase } from '../../tradeCase.js'
 import { TriangleCase } from '../../triangleCase.js'
 
 export class ExchangeModel extends ConnectableModel {
@@ -9,6 +9,28 @@ export class ExchangeModel extends ConnectableModel {
 
     if (this.constructor == ExchangeModel)
       throw new Error("Abstract classes can't be instantiated.")
+  }
+
+  public logStatus(): void {
+    const online = 'Online'
+    const offline = 'Offline(!)'
+    const status = this.socket
+      ? this.socket?.readyState === 1
+        ? online
+        : offline
+      : offline
+
+    const symbolsTotal = Object.keys(this.tickers).length
+    const name = this.constructor.name
+
+    console.log(
+      `[ ${status} ] Updates:`,
+      this.updated,
+      `Symbols:`,
+      symbolsTotal,
+      ` - ${name}`
+    )
+    this.updated = 0
   }
 
   public getSelfCases(): TradeCase[] {

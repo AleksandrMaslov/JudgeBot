@@ -97,5 +97,7 @@ export class OkxModel extends ExchangeModel {
       bidPrice: parseFloat(bidPx),
       bidQty: parseFloat(bidSz),
     })
+
+    this.updated++
   }
 }

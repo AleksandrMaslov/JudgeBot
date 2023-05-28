@@ -1,5 +1,3 @@
-import WebSocket from 'ws'
-
 import { ExchangeModel } from './base/exchangeModel.js'
 import {
   PoloniexTickerResponse,
@@ -15,9 +13,7 @@ export class PoloniexModel extends ExchangeModel {
     this.tickersUrl = 'https://api.poloniex.com/markets/ticker24h'
     this.wsConnectionUrl = 'wss://ws.poloniex.com/ws/public'
     this.pingMessage = { event: 'ping' }
-
     this.senderPrefix = this.constructor.name
-    this.isDebugMode = true
 
     this.init()
     this.definePingTimer()
@@ -95,5 +91,7 @@ export class PoloniexModel extends ExchangeModel {
       bidPrice: Array.isArray(bids[0]) ? parseFloat(bids[0][0]) : undefined,
       bidQty: Array.isArray(bids[0]) ? parseFloat(bids[0][1]) : undefined,
     })
+
+    this.updated++
   }
 }

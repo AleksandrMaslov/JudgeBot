@@ -105,6 +105,8 @@ export class BinanceModel extends ExchangeModel {
         bidPrice: parseFloat(b),
         bidQty: parseFloat(B),
       })
+
+      this.updated++
     })
   }
 }

@@ -6,18 +6,20 @@ import { Ticker } from '../../ticker.js'
 
 export class ConnectableModel {
   public tickers: any
+  socket?: WebSocket
 
   symbolsUrl: string | undefined
   tickersUrl: string | undefined
   wsConnectionUrl: string
   tickersTopic: string
 
+  updated: number
+
   pingTimer: number
   lastPingTime: number
   pingMessage: Object
 
   senderPrefix: string
-  socket?: WebSocket
   isDebugMode: boolean
 
   constructor() {
@@ -27,6 +29,8 @@ export class ConnectableModel {
     this.tickersUrl = undefined
     this.wsConnectionUrl = ''
     this.tickersTopic = ''
+
+    this.updated = 0
 
     this.pingTimer = 20000
     this.lastPingTime = Date.now()

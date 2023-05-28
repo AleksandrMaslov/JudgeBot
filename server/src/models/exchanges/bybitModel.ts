@@ -104,5 +104,7 @@ export class BybitModel extends ExchangeModel {
       bidPrice: Array.isArray(b[0]) ? parseFloat(b[0][0]) : undefined,
       bidQty: Array.isArray(b[0]) ? parseFloat(b[0][1]) : undefined,
     })
+
+    this.updated++
   }
 }
