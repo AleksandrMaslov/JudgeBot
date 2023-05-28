@@ -12,7 +12,6 @@ export class OkxModel extends ExchangeModel {
 
     this.tickersUrl = 'https://www.okx.com/api/v5/market/tickers?instType=SPOT'
     this.wsConnectionUrl = 'wss://ws.okx.com:8443/ws/v5/public'
-    this.tickersTopic = ''
 
     this.senderPrefix = this.constructor.name
     this.isDebugMode = true
