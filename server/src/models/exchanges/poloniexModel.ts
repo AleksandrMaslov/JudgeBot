@@ -28,30 +28,34 @@ export class PoloniexModel extends ExchangeModel {
   }
 
   getValidTickers(tickersData: PoloniexTickerData[]): PoloniexTickerData[] {
-    return tickersData.filter(
-      (tickerData: PoloniexTickerData) =>
-        parseFloat(tickerData.ask) !== 0 &&
-        parseFloat(tickerData.askQuantity) !== 0 &&
-        parseFloat(tickerData.bid) !== 0 &&
-        parseFloat(tickerData.bidQuantity) !== 0
-    )
+    return tickersData.filter((tickerData: PoloniexTickerData) => {
+      const { ask, askQuantity, bid, bidQuantity } = tickerData
+      return (
+        parseFloat(ask) !== 0 &&
+        parseFloat(askQuantity) !== 0 &&
+        parseFloat(bid) !== 0 &&
+        parseFloat(bidQuantity) !== 0
+      )
+    })
   }
 
   parseTickerData(tickerData: PoloniexTickerData): TickerUpdate {
+    const { symbol, ask, askQuantity, bid, bidQuantity } = tickerData
     return {
-      symbol: tickerData.symbol,
-      askPrice: parseFloat(tickerData.ask),
-      askQty: parseFloat(tickerData.askQuantity),
-      bidPrice: parseFloat(tickerData.bid),
-      bidQty: parseFloat(tickerData.bidQuantity),
+      symbol: symbol,
+      askPrice: parseFloat(ask),
+      askQty: parseFloat(askQuantity),
+      bidPrice: parseFloat(bid),
+      bidQty: parseFloat(bidQuantity),
     }
   }
 
   // OVERRIDE WS DATA METHODS
   isDataMessageNotValid(messageData: any): boolean {
-    if (messageData.event === 'subscribe') return true
-    if (messageData.event === 'pong') return true
-    if (messageData.channel === 'book') return false
+    const { event, channel } = messageData
+    if (event === 'subscribe') return true
+    if (event === 'pong') return true
+    if (channel === 'book') return false
     console.log('UNDEFINED MESSAGE:', messageData)
     return true
   }

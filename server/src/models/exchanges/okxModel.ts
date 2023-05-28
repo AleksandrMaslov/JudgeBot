@@ -26,32 +26,38 @@ export class OkxModel extends ExchangeModel {
   }
 
   getValidTickers(tickersData: OkxTickerData[]): OkxTickerData[] {
-    return tickersData.filter(
-      (tickerData: OkxTickerData) =>
-        parseFloat(tickerData.askPx) !== 0 &&
-        parseFloat(tickerData.askSz) !== 0 &&
-        parseFloat(tickerData.bidPx) !== 0 &&
-        parseFloat(tickerData.bidSz) !== 0
-    )
+    return tickersData.filter((tickerData: OkxTickerData) => {
+      const { askPx, askSz, bidPx, bidSz } = tickerData
+      return (
+        parseFloat(askPx) !== 0 &&
+        parseFloat(askSz) !== 0 &&
+        parseFloat(bidPx) !== 0 &&
+        parseFloat(bidSz) !== 0
+      )
+    })
   }
 
   parseTickerData(tickerData: OkxTickerData): TickerUpdate {
+    const { instId, askPx, askSz, bidPx, bidSz } = tickerData
     return {
-      symbol: tickerData.instId,
-      askPrice: parseFloat(tickerData.askPx),
-      askQty: parseFloat(tickerData.askSz),
-      bidPrice: parseFloat(tickerData.bidPx),
-      bidQty: parseFloat(tickerData.bidSz),
+      symbol: instId,
+      askPrice: parseFloat(askPx),
+      askQty: parseFloat(askSz),
+      bidPrice: parseFloat(bidPx),
+      bidQty: parseFloat(bidSz),
     }
   }
 
   // OVERRIDE WS DATA METHODS
   isDataMessageNotValid(messageData: any): boolean {
-    if (messageData.event)
-      if (messageData.event !== 'subscribe') console.log(messageData)
+    const {
+      event,
+      arg: { channel },
+    } = messageData
 
-    if (messageData.event) return true
-    if (messageData.arg.channel === 'tickers') return false
+    if (event) if (event !== 'subscribe') console.log(messageData)
+    if (event) return true
+    if (channel === 'tickers') return false
     console.log('UNDEFINED MESSAGE:', messageData)
     return true
   }

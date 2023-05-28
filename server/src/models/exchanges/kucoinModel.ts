@@ -49,9 +49,10 @@ export class KucoinModel extends ExchangeModel {
   }
 
   parseSymbolData(symbolData: KucoinSymbolData): SymbolData {
+    const { symbol } = symbolData
     return {
       exchange: this.constructor.name.replace('Model', ''),
-      symbol: symbolData.symbol,
+      symbol: symbol,
     }
   }
 
@@ -68,19 +69,20 @@ export class KucoinModel extends ExchangeModel {
   }
 
   getValidTickers(tickersData: KucoinTickerData[]): KucoinTickerData[] {
-    return tickersData.filter(
-      (tickerData: KucoinTickerData) =>
-        parseFloat(tickerData.buy) !== 0 && parseFloat(tickerData.sell) !== 0
-    )
+    return tickersData.filter((tickerData: KucoinTickerData) => {
+      const { buy, sell } = tickerData
+      return parseFloat(buy) !== 0 && parseFloat(sell) !== 0
+    })
   }
 
   parseTickerData(tickerData: KucoinTickerData): TickerUpdate {
+    const { symbol, buy, sell } = tickerData
     return {
-      symbol: tickerData.symbol,
-      askPrice: parseFloat(tickerData.buy),
-      askQty: 0,
-      bidPrice: parseFloat(tickerData.sell),
-      bidQty: 0,
+      symbol: symbol,
+      askPrice: parseFloat(buy),
+      askQty: undefined,
+      bidPrice: parseFloat(sell),
+      bidQty: undefined,
     }
   }
 

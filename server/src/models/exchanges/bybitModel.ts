@@ -34,30 +34,34 @@ export class BybitModel extends ExchangeModel {
   }
 
   getValidTickers(tickersData: BybitTickerData[]): BybitTickerData[] {
-    return tickersData.filter(
-      (tickerData: BybitTickerData) =>
-        parseFloat(tickerData.ask1Price) !== 0 &&
-        parseFloat(tickerData.ask1Size) !== 0 &&
-        parseFloat(tickerData.bid1Price) !== 0 &&
-        parseFloat(tickerData.bid1Size) !== 0
-    )
+    return tickersData.filter((tickerData: BybitTickerData) => {
+      const { ask1Price, ask1Size, bid1Price, bid1Size } = tickerData
+      return (
+        parseFloat(ask1Price) !== 0 &&
+        parseFloat(ask1Size) !== 0 &&
+        parseFloat(bid1Price) !== 0 &&
+        parseFloat(bid1Size) !== 0
+      )
+    })
   }
 
   parseTickerData(tickerData: BybitTickerData): TickerUpdate {
+    const { symbol, ask1Price, ask1Size, bid1Price, bid1Size } = tickerData
     return {
-      symbol: tickerData.symbol,
-      askPrice: parseFloat(tickerData.ask1Price),
-      askQty: parseFloat(tickerData.ask1Size),
-      bidPrice: parseFloat(tickerData.bid1Price),
-      bidQty: parseFloat(tickerData.bid1Size),
+      symbol: symbol,
+      askPrice: parseFloat(ask1Price),
+      askQty: parseFloat(ask1Size),
+      bidPrice: parseFloat(bid1Price),
+      bidQty: parseFloat(bid1Size),
     }
   }
 
   // OVERRIDE WS DATA METHODS
   isDataMessageNotValid(messageData: any): boolean {
-    if (messageData.success) return true
-    if (messageData.type === 'delta') return false
-    if (messageData.type === 'snapshot') return false
+    const { success, type } = messageData
+    if (success) return true
+    if (type === 'delta') return false
+    if (type === 'snapshot') return false
     console.log('UNDEFINED MESSAGE:', messageData)
     return true
   }

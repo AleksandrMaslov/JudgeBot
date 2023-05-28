@@ -40,9 +40,10 @@ export class BinanceModel extends ExchangeModel {
   }
 
   parseSymbolData(symbolData: BinanceSymbolData): SymbolData {
+    const { symbol } = symbolData
     return {
       exchange: this.constructor.name.replace('Model', ''),
-      symbol: symbolData.symbol,
+      symbol: symbol,
     }
   }
 
@@ -55,28 +56,32 @@ export class BinanceModel extends ExchangeModel {
   }
 
   getValidTickers(tickersData: BinanceTickerData[]): BinanceTickerData[] {
-    return tickersData.filter(
-      (tickerData: BinanceTickerData) =>
-        parseFloat(tickerData.askPrice) !== 0 &&
-        parseFloat(tickerData.askQty) !== 0 &&
-        parseFloat(tickerData.bidPrice) !== 0 &&
-        parseFloat(tickerData.bidQty) !== 0
-    )
+    return tickersData.filter((tickerData: BinanceTickerData) => {
+      const { askPrice, askQty, bidPrice, bidQty } = tickerData
+      return (
+        parseFloat(askPrice) !== 0 &&
+        parseFloat(askQty) !== 0 &&
+        parseFloat(bidPrice) !== 0 &&
+        parseFloat(bidQty) !== 0
+      )
+    })
   }
 
   parseTickerData(tickerData: BinanceTickerData): TickerUpdate {
+    const { symbol, askPrice, askQty, bidPrice, bidQty } = tickerData
     return {
-      symbol: tickerData.symbol,
-      askPrice: parseFloat(tickerData.askPrice),
-      askQty: parseFloat(tickerData.askQty),
-      bidPrice: parseFloat(tickerData.bidPrice),
-      bidQty: parseFloat(tickerData.bidQty),
+      symbol: symbol,
+      askPrice: parseFloat(askPrice),
+      askQty: parseFloat(askQty),
+      bidPrice: parseFloat(bidPrice),
+      bidQty: parseFloat(bidQty),
     }
   }
 
   // OVERRIDE WS DATA METHODS
   isDataMessageNotValid(messageData: any): boolean {
-    return messageData.result === null
+    const { result } = messageData
+    return result === null
   }
 
   subscribeAllTickers(): void {
