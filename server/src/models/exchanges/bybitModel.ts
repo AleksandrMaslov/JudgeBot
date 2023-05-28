@@ -24,12 +24,9 @@ export class BybitModel extends ExchangeModel {
   parseTickersResponse(response: {
     data: BybitTickerResponse
   }): BybitTickerData[] {
-    const {
-      data: {
-        result: { list },
-      },
-    } = response
-
+    const { data } = response
+    const { result } = data
+    const { list } = result
     return this.getValidTickers(list)
   }
 

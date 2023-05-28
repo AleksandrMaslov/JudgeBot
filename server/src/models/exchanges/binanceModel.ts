@@ -26,10 +26,8 @@ export class BinanceModel extends ExchangeModel {
   parseSymbolsResponse(response: {
     data: BinanceSymbolResponse
   }): BinanceSymbolData[] {
-    const {
-      data: { symbols },
-    } = response
-
+    const { data } = response
+    const { symbols } = data
     return this.getValidSymbols(symbols)
   }
 

@@ -50,11 +50,8 @@ export class OkxModel extends ExchangeModel {
 
   // OVERRIDE WS DATA METHODS
   isDataMessageNotValid(messageData: any): boolean {
-    const {
-      event,
-      arg: { channel },
-    } = messageData
-
+    const { event, arg } = messageData
+    const { channel } = arg
     if (event) if (event !== 'subscribe') console.log(messageData)
     if (event) return true
     if (channel === 'tickers') return false

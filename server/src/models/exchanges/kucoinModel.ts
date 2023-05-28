@@ -38,7 +38,6 @@ export class KucoinModel extends ExchangeModel {
     const {
       data: { data },
     } = response
-
     return this.getValidSymbols(data)
   }
 
@@ -124,10 +123,8 @@ export class KucoinModel extends ExchangeModel {
   }
 
   updateTickers(tickerData: KucoinTicker): void {
-    const {
-      subject,
-      data: { bestAsk, bestAskSize, bestBid, bestBidSize },
-    } = tickerData
+    const { subject, data } = tickerData
+    const { bestAsk, bestAskSize, bestBid, bestBidSize } = data
 
     this.ensureTicker({
       exchange: this.constructor.name.replace('Model', ''),
