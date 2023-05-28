@@ -20,3 +20,7 @@ export { BybitTicker } from './bybit/ticker'
 export { OkxTickerResponse } from './okx/tickerResponse'
 export { OkxTickerData } from './okx/tickerData'
 export { OkxTicker } from './okx/ticker'
+
+export { PoloniexTickerResponse } from './poloniex/tickerResponse'
+export { PoloniexTickerData } from './poloniex/tickerData'
+export { PoloniexTicker } from './poloniex/ticker'
