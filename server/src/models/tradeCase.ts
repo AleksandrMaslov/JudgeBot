@@ -73,11 +73,12 @@ export class TradeCase {
   }
 
   private isReversedSymbol(): boolean {
-    return !(
-      (this.tickerA.symbol.startsWith(this.pairAsset) &&
-        this.tickerB.symbol.startsWith(this.pairAsset)) ||
-      (this.tickerA.symbol.endsWith(this.pairAsset) &&
-        this.tickerB.symbol.endsWith(this.pairAsset))
-    )
+    const starts =
+      this.tickerA.symbol.startsWith(this.pairAsset) &&
+      this.tickerB.symbol.startsWith(this.pairAsset)
+    const ends =
+      this.tickerA.symbol.endsWith(this.pairAsset) &&
+      this.tickerB.symbol.endsWith(this.pairAsset)
+    return !(starts || ends)
   }
 }
