@@ -17,9 +17,7 @@ export class BinanceModel extends ExchangeModel {
     this.tickersUrl = 'https://api.binance.com/api/v3/ticker/bookTicker'
     this.wsConnectionUrl = 'wss://stream.binance.com:9443/ws'
     this.tickersTopic = '!ticker@arr'
-
     this.senderPrefix = this.constructor.name
-    this.isDebugMode = true
 
     this.init()
   }

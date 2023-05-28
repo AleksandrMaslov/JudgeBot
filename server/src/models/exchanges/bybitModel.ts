@@ -1,5 +1,3 @@
-import { WebSocket } from 'ws'
-
 import { ExchangeModel } from './base/exchangeModel.js'
 import {
   BybitTickerResponse,
@@ -9,21 +7,14 @@ import {
 } from '../../types'
 
 export class BybitModel extends ExchangeModel {
-  private pingTimer: number
-  private lastPingTime: number
-
   constructor() {
     super()
 
     this.tickersUrl = 'https://api.bybit.com/v5/market/tickers?category=spot'
     this.wsConnectionUrl = 'wss://stream.bybit.com/v5/public/spot'
     this.tickersTopic = 'orderbook.1.'
-
+    this.pingMessage = { op: 'ping' }
     this.senderPrefix = this.constructor.name
-    this.isDebugMode = true
-
-    this.pingTimer = 20000
-    this.lastPingTime = Date.now()
 
     this.init()
     this.definePingTimer()
@@ -113,38 +104,5 @@ export class BybitModel extends ExchangeModel {
       bidPrice: Array.isArray(b[0]) ? parseFloat(b[0][0]) : undefined,
       bidQty: Array.isArray(b[0]) ? parseFloat(b[0][1]) : undefined,
     })
-  }
-
-  // PRIVATE METHODS
-  private async definePingTimer(): Promise<void> {
-    return new Promise<void>(async (resolve) => {
-      while (!this.isTimeToPing()) await this.delay(1000)
-      this.ping()
-      resolve()
-      this.definePingTimer()
-    })
-  }
-
-  private isTimeToPing(): boolean {
-    const current = Date.now()
-    const diff = current - this.lastPingTime
-    if (diff > this.pingTimer) return true
-    return false
-  }
-
-  private ping(): void {
-    this.lastPingTime = Date.now()
-
-    if (this.socket?.readyState != WebSocket.OPEN) return
-
-    this.socket?.send(
-      JSON.stringify({
-        op: 'ping',
-      })
-    )
-  }
-
-  private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 }

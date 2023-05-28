@@ -12,9 +12,7 @@ export class OkxModel extends ExchangeModel {
 
     this.tickersUrl = 'https://www.okx.com/api/v5/market/tickers?instType=SPOT'
     this.wsConnectionUrl = 'wss://ws.okx.com:8443/ws/v5/public'
-
     this.senderPrefix = this.constructor.name
-    this.isDebugMode = true
 
     this.init()
   }
@@ -99,10 +97,5 @@ export class OkxModel extends ExchangeModel {
       bidPrice: parseFloat(bidPx),
       bidQty: parseFloat(bidSz),
     })
-  }
-
-  // PRIVATE METHODS
-  private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 }
