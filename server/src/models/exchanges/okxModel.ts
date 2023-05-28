@@ -63,7 +63,7 @@ export class OkxModel extends ExchangeModel {
     let total = symbols.length
 
     while (total === 0) {
-      await this.delay(1000)
+      await this.delay(500)
       symbols = Object.keys(this.tickers)
       total = symbols.length
     }
