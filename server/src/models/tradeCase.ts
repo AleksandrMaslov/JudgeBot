@@ -40,17 +40,9 @@ export class TradeCase {
   }
 
   private analize() {
-    if (
-      !(
-        (this.tickerA.symbol.startsWith(this.pairAsset) &&
-          this.tickerB.symbol.startsWith(this.pairAsset)) ||
-        (this.tickerA.symbol.endsWith(this.pairAsset) &&
-          this.tickerB.symbol.endsWith(this.pairAsset))
-      )
-    ) {
+    if (this.isReversedSymbol()) {
       this.calculateReverseProffit(this.tickerA, this.tickerB)
       if (this.proffit! > 0) return
-
       this.calculateReverseProffit(this.tickerB, this.tickerA)
       return
     }
@@ -78,5 +70,14 @@ export class TradeCase {
 
   private rollPrice(price: number): number {
     return 1 / price
+  }
+
+  private isReversedSymbol(): boolean {
+    return !(
+      (this.tickerA.symbol.startsWith(this.pairAsset) &&
+        this.tickerB.symbol.startsWith(this.pairAsset)) ||
+      (this.tickerA.symbol.endsWith(this.pairAsset) &&
+        this.tickerB.symbol.endsWith(this.pairAsset))
+    )
   }
 }
