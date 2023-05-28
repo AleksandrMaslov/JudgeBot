@@ -130,7 +130,11 @@ export class ExchangeModel extends ConnectableModel {
       if (ticker.bidPrice === 0) continue
       if (ticker.bidQty === 0) continue
 
-      const pairAsset = symbol.replace(asset, '').replace('-', '')
+      const pairAsset = symbol
+        .replace(asset, '')
+        .replace('-', '')
+        .replace('_', '')
+
       tickers[pairAsset] = ticker
     }
     return tickers
