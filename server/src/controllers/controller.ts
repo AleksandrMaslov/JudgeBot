@@ -4,6 +4,7 @@ import {
   BinanceModel,
   BybitModel,
   KucoinModel,
+  OkcoinModel,
   OkxModel,
   PoloniexModel,
 } from '../models/index.js'
@@ -14,10 +15,11 @@ export class Controller {
   constructor() {
     this.exchanges = [
       new BinanceModel(),
-      new BybitModel(),
-      new KucoinModel(),
-      new OkxModel(),
-      new PoloniexModel(),
+      // new BybitModel(),
+      // new KucoinModel(),
+      // new OkcoinModel(),
+      // new OkxModel(),
+      // new PoloniexModel(),
     ]
   }
 
@@ -27,15 +29,13 @@ export class Controller {
     }, timer)
   }
 
-  public process(): void {
+  private process(): void {
     this.exchanges.forEach((e) => e.logStatus())
     console.log()
-
-    const cases = this.getAllCasesWithAsset('USDT')
-    this.logCases(cases)
-
-    console.log()
-    console.log()
+    // const cases = this.getAllCasesWithAsset('USDT')
+    // this.logCases(cases)
+    // console.log()
+    // console.log()
   }
 
   private getAllCasesWithAsset(asset: string): TradeCase[] {
@@ -57,8 +57,8 @@ export class Controller {
 
   private logCases(cases: TradeCase[]): void {
     cases
-      .filter((c) => c.proffit! > 10 && c.proffit! < 50)
-      .sort((a, b) => b.proffit! - a.proffit!)
+      // .filter((c) => c.proffit! > 10 && c.proffit! < 50)
+      // .sort((a, b) => b.proffit! - a.proffit!)
       .forEach((c) => c.log())
   }
 }
