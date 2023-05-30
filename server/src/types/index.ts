@@ -7,6 +7,10 @@ export { BinanceTickerResponse } from './binance/tickerResponse'
 export { BinanceTickerData } from './binance/tickerData'
 export { BinanceTicker } from './binance/ticker'
 
+export { CryptoComTickerResponse } from './cryptocom/tickerResponse'
+export { CryptoComTickerData } from './cryptocom/tickerData'
+export { CryptoComTicker } from './cryptocom/ticker'
+
 export { KucoinSymbolResponse } from './kucoin/symbolResponse'
 export { KucoinSymbolData } from './kucoin/symbolData'
 export { KucoinTickerResponse } from './kucoin/tickerResponse'
