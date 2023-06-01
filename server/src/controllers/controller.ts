@@ -2,6 +2,7 @@ import {
   ExchangeModel,
   TradeCase,
   BinanceModel,
+  BitfinexModel,
   BybitModel,
   CryptoComModel,
   ExmoModel,
@@ -18,13 +19,14 @@ export class Controller {
   constructor() {
     this.exchanges = [
       new BinanceModel(),
-      // new BybitModel(),
-      // new CryptoComModel(),
-      // new ExmoModel(),
-      // new KucoinModel(),
-      // new OkcoinModel(),
-      // new OkxModel(),
-      // new PoloniexModel(),
+      new BitfinexModel(),
+      new BybitModel(),
+      new CryptoComModel(),
+      new ExmoModel(),
+      new KucoinModel(),
+      new OkcoinModel(),
+      new OkxModel(),
+      new PoloniexModel(),
       new TidexModel(),
     ]
   }
@@ -38,6 +40,8 @@ export class Controller {
   private process(): void {
     this.exchanges.forEach((e) => e.logStatus())
     console.log()
+
+    if (this.exchanges.length < 2) return
 
     const cases = this.getAllCasesWithAsset('USDT')
     this.logCases(cases)
