@@ -7,6 +7,10 @@ export { BinanceTickerResponse } from './binance/tickerResponse'
 export { BinanceTickerData } from './binance/tickerData'
 export { BinanceTicker } from './binance/ticker'
 
+export { BitfinexTickerResponse } from './bitfinex/tickerResponse'
+export { BitfinexTickerData } from './bitfinex/tickerData'
+export { BitfinexTicker } from './bitfinex/ticker'
+
 export { CryptoComTickerResponse } from './cryptocom/tickerResponse'
 export { CryptoComTickerData } from './cryptocom/tickerData'
 export { CryptoComTicker } from './cryptocom/ticker'
@@ -36,3 +40,12 @@ export { OkxTicker } from './okx/ticker'
 export { PoloniexTickerResponse } from './poloniex/tickerResponse'
 export { PoloniexTickerData } from './poloniex/tickerData'
 export { PoloniexTicker } from './poloniex/ticker'
+
+export { TidexTickerResponse } from './tidex/tickerResponse'
+export { TidexTickerData } from './tidex/tickerData'
+export { TidexTicker } from './tidex/ticker'
+
+// ===============================================================
+export { GENERICTickerResponse } from './GENERIC/tickerResponse'
+export { GENERICTickerData } from './GENERIC/tickerData'
+export { GENERICTicker } from './GENERIC/ticker'
