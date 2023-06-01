@@ -6,6 +6,7 @@ export { ConnectableModel } from './exchanges/base/connectableModel.js'
 export { ExchangeModel } from './exchanges/base/exchangeModel.js'
 
 export { BinanceModel } from './exchanges/binanceModel.js'
+export { BitfinexModel } from './exchanges/bitfinexModel.js'
 export { BybitModel } from './exchanges/bybitModel.js'
 export { CryptoComModel } from './exchanges/cryptocomModel.js'
 export { ExmoModel } from './exchanges/exmoModel.js'
