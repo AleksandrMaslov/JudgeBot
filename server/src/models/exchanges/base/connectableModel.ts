@@ -81,7 +81,7 @@ export class ConnectableModel {
   messageHandler(messageData: any): void {}
 
   isDataMessageNotValid(messageData: any): boolean {
-    return false
+    return true
   }
 
   subscribeAllTickers(): void {}
