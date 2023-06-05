@@ -1,5 +1,6 @@
 import axios from 'axios'
 import WebSocket from 'ws'
+import { Data, ungzip } from 'pako'
 
 import { SymbolData, TickerUpdate } from '../../../types'
 import { Ticker } from '../../ticker.js'
@@ -145,7 +146,17 @@ export class ConnectableModel {
   }
 
   private onSocketMessage(event: WebSocket.MessageEvent): void {
-    const messageData = JSON.parse(event.data.toString())
+    const { data } = event
+
+    let stringData: string
+    let messageData: Object
+    try {
+      stringData = data.toString()
+      messageData = JSON.parse(stringData)
+    } catch (error) {
+      stringData = ungzip(data as Data, { to: 'string' })
+      messageData = JSON.parse(stringData)
+    }
 
     this.messageHandler(messageData)
 
