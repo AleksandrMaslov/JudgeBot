@@ -33,6 +33,10 @@ export { ExmoTickerResponse } from './exmo/tickerResponse'
 export { ExmoTickerData } from './exmo/tickerData'
 export { ExmoTicker } from './exmo/ticker'
 
+export { HuobiTickerResponse } from './huobi/tickerResponse'
+export { HuobiTickerData } from './huobi/tickerData'
+export { HuobiTicker } from './huobi/ticker'
+
 export { OkcoinTickerResponse } from './okcoin/tickerResponse'
 export { OkcoinTickerData } from './okcoin/tickerData'
 export { OkcoinTicker } from './okcoin/ticker'
