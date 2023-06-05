@@ -12,14 +12,17 @@ export class CoinbaseModel extends ExchangeModel {
   }
 
   // OVERRIDE WS DATA METHODS
+  messageHandler(messageData: any): void {
+    const { type } = messageData
+    if (!(type === 'status')) return
+    this.parseStatusData(messageData)
+  }
+
   isDataMessageNotValid(messageData: any): boolean {
     const { type } = messageData
     if (type === 'subscriptions') return true
     if (type === 'ticker') return false
-    if (type === 'status') {
-      this.parseStatusData(messageData)
-      return true
-    }
+    if (type === 'status') return true
     console.log('UNDEFINED MESSAGE:', messageData)
     return true
   }

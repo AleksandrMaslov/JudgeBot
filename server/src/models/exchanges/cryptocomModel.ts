@@ -48,17 +48,21 @@ export class CryptoComModel extends ExchangeModel {
   }
 
   // OVERRIDE WS DATA METHODS
+  messageHandler(messageData: any): void {
+    const { method, id } = messageData
+    if (!(method === 'public/heartbeat')) return
+
+    this.socket!.send(
+      JSON.stringify({
+        id: id,
+        method: 'public/respond-heartbeat',
+      })
+    )
+  }
+
   isDataMessageNotValid(messageData: any): boolean {
-    const { method, id, result } = messageData
-    if (method === 'public/heartbeat') {
-      this.socket!.send(
-        JSON.stringify({
-          id: id,
-          method: 'public/respond-heartbeat',
-        })
-      )
-      return true
-    }
+    const { method, result } = messageData
+    if (method === 'public/heartbeat') return true
     if (result) return false
     if (method === 'subscribe') return true
     console.log('UNDEFINED MESSAGE:', messageData)
