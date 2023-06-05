@@ -4,6 +4,7 @@ import {
   BinanceModel,
   BitfinexModel,
   BybitModel,
+  CoinbaseModel,
   CryptoComModel,
   ExmoModel,
   KucoinModel,
@@ -18,16 +19,17 @@ export class Controller {
 
   constructor() {
     this.exchanges = [
-      new BinanceModel(),
-      new BitfinexModel(),
-      new BybitModel(),
-      new CryptoComModel(),
-      new ExmoModel(),
-      new KucoinModel(),
-      new OkcoinModel(),
-      new OkxModel(),
-      new PoloniexModel(),
-      new TidexModel(),
+      // new BinanceModel(),
+      // new BitfinexModel(),
+      // new BybitModel(),
+      // new CoinbaseModel(),
+      // new CryptoComModel(),
+      // new ExmoModel(),
+      // new KucoinModel(),
+      // new OkcoinModel(),
+      // new OkxModel(),
+      // new PoloniexModel(),
+      // new TidexModel(),
     ]
   }
 
