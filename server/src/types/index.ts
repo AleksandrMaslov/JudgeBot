@@ -25,6 +25,10 @@ export { BybitTickerResponse } from './bybit/tickerResponse'
 export { BybitTickerData } from './bybit/tickerData'
 export { BybitTicker } from './bybit/ticker'
 
+export { CoinbaseTickerResponse } from './coinbase/tickerResponse'
+export { CoinbaseTickerData } from './coinbase/tickerData'
+export { CoinbaseTicker } from './coinbase/ticker'
+
 export { ExmoTickerResponse } from './exmo/tickerResponse'
 export { ExmoTickerData } from './exmo/tickerData'
 export { ExmoTicker } from './exmo/ticker'
