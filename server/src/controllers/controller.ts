@@ -13,6 +13,7 @@ import {
   OkxModel,
   PoloniexModel,
   TidexModel,
+  MexcModel,
 } from '../models/index.js'
 
 export class Controller {
@@ -28,6 +29,7 @@ export class Controller {
       // new ExmoModel(),
       // new HuobiModel(),
       // new KucoinModel(),
+      new MexcModel(),
       // new OkcoinModel(),
       // new OkxModel(),
       // new PoloniexModel(),
