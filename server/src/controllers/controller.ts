@@ -14,6 +14,7 @@ import {
   PoloniexModel,
   TidexModel,
   MexcModel,
+  KrakenModel,
 } from '../models/index.js'
 
 export class Controller {
@@ -21,19 +22,20 @@ export class Controller {
 
   constructor() {
     this.exchanges = [
-      // new BinanceModel(),
-      // new BitfinexModel(),
-      // new BybitModel(),
-      // new CoinbaseModel(),
-      // new CryptoComModel(),
-      // new ExmoModel(),
-      // new HuobiModel(),
-      // new KucoinModel(),
+      new BinanceModel(),
+      new BitfinexModel(),
+      new BybitModel(),
+      new CoinbaseModel(),
+      new CryptoComModel(),
+      new ExmoModel(),
+      new HuobiModel(),
+      new KrakenModel(),
+      new KucoinModel(),
       new MexcModel(),
-      // new OkcoinModel(),
-      // new OkxModel(),
+      new OkcoinModel(),
+      new OkxModel(),
       // new PoloniexModel(),
-      // new TidexModel(),
+      new TidexModel(),
     ]
   }
 

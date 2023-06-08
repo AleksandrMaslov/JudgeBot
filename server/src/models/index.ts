@@ -7,6 +7,7 @@ export { ExchangeModel } from './exchanges/base/exchangeModel.js'
 
 export { BinanceModel } from './exchanges/binanceModel.js'
 export { BitfinexModel } from './exchanges/bitfinexModel.js'
+export { KrakenModel } from './exchanges/krakenModel.js'
 export { BybitModel } from './exchanges/bybitModel.js'
 export { CoinbaseModel } from './exchanges/coinbaseModel.js'
 export { CryptoComModel } from './exchanges/cryptocomModel.js'
