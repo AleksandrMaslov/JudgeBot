@@ -23,7 +23,6 @@ export { KucoinTicker } from './kucoin/ticker'
 
 export { MexcTickerResponse } from './mexc/tickerResponse'
 export { MexcTickerData } from './mexc/tickerData'
-export { MexcTicker } from './mexc/ticker'
 
 export { BybitTickerResponse } from './bybit/tickerResponse'
 export { BybitTickerData } from './bybit/tickerData'
@@ -40,6 +39,10 @@ export { ExmoTicker } from './exmo/ticker'
 export { HuobiTickerResponse } from './huobi/tickerResponse'
 export { HuobiTickerData } from './huobi/tickerData'
 export { HuobiTicker } from './huobi/ticker'
+
+export { KrakenTickerResponse } from './kraken/tickerResponse'
+export { KrakenTickerData } from './kraken/tickerData'
+export { KrakenTicker } from './kraken/ticker'
 
 export { OkcoinTickerResponse } from './okcoin/tickerResponse'
 export { OkcoinTickerData } from './okcoin/tickerData'
