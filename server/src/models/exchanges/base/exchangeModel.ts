@@ -32,9 +32,9 @@ export class ExchangeModel extends ConnectableModel {
     this.updated = 0
     return {
       status: `[ ${status} ]`,
-      name: `${name}`,
-      symbols: `Symbols: ${symbolsTotal}`,
-      updates: `Updates: ${updates}`,
+      name: name,
+      symbols: symbolsTotal.toString(),
+      updates: updates.toString(),
     }
   }
 

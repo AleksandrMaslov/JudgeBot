@@ -43,8 +43,18 @@ export class TeleBot {
       updates: string
     }[]
   ): void {
+    const statsWithHeaders = [
+      {
+        status: 'STATUS',
+        name: 'EXCHANGE',
+        symbols: 'PAIRS',
+        updates: 'UPDATED',
+      },
+      ...stats,
+    ]
+
     this.exchangeStatus = {
-      inline_keyboard: stats.map((stat, i) => {
+      inline_keyboard: statsWithHeaders.map((stat, i) => {
         const { status, name, symbols, updates } = stat
         const prefix = status.includes('Online') ? `🍀` : `🪵`
 

@@ -55,10 +55,10 @@ export class Controller {
 
     if (this.exchanges.length < 2) return
 
-    // const cases = this.getAllCasesWithAsset('USDT')
-    // this.logCases(cases)
-    // console.log()
-    // console.log()
+    const cases = this.getAllCasesWithAsset('USDT')
+    this.logCases(cases)
+    console.log()
+    console.log()
   }
 
   private getAllCasesWithAsset(asset: string): TradeCase[] {
