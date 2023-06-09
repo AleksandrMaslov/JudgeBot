@@ -15,8 +15,8 @@ import {
   TidexModel,
   MexcModel,
   KrakenModel,
+  TeleBot,
 } from '../models/index.js'
-import { TeleBot } from '../models/telebot/telebotModel.js'
 
 export class Controller {
   private telebot: TeleBot
