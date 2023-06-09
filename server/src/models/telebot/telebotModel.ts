@@ -48,7 +48,7 @@ export class TeleBot {
         status: 'STATUS',
         name: 'EXCHANGE',
         symbols: 'PAIRS',
-        updates: 'UPDATED',
+        updates: 'UPDATES',
       },
       ...stats,
     ]
