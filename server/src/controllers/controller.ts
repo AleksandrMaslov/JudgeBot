@@ -22,20 +22,20 @@ export class Controller {
 
   constructor() {
     this.exchanges = [
-      // new BinanceModel(),
-      // new BitfinexModel(),
-      // new BybitModel(),
-      // new CoinbaseModel(),
-      // new CryptoComModel(),
-      // new ExmoModel(),
-      // new HuobiModel(),
-      // new KrakenModel(),
-      // new KucoinModel(),
-      // new MexcModel(),
-      // new OkcoinModel(),
-      // new OkxModel(),
-      // new PoloniexModel(),
-      // new TidexModel(),
+      new BinanceModel(),
+      new BitfinexModel(),
+      new BybitModel(),
+      new CoinbaseModel(),
+      new CryptoComModel(),
+      new ExmoModel(),
+      new HuobiModel(),
+      new KrakenModel(),
+      new KucoinModel(),
+      new MexcModel(),
+      new OkcoinModel(),
+      new OkxModel(),
+      new PoloniexModel(),
+      new TidexModel(),
     ]
   }
 
