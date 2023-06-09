@@ -76,7 +76,7 @@ export class Controller {
 
   private logCases(cases: TradeCase[]): void {
     cases
-      .filter((c) => c.proffit! > 5 && c.proffit! < 50)
+      .filter((c) => c.proffit! > 5 && c.proffit! < 30)
       .sort((a, b) => b.proffit! - a.proffit!)
       .forEach((c) => c.log())
   }
