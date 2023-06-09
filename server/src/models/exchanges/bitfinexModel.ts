@@ -14,7 +14,8 @@ export class BitfinexModel extends ExchangeModel {
     super()
 
     this.tickersUrl = 'https://api-pub.bitfinex.com/v2/tickers?symbols=ALL'
-    this.wsConnectionUrl = 'wss://api-pub.bitfinex.com/ws/2'
+    this.wsConnectionUrl =
+      'wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self'
     this.senderPrefix = this.constructor.name
 
     this.refreshTimer = 1000
@@ -42,11 +43,6 @@ export class BitfinexModel extends ExchangeModel {
         bidQuantity !== 0 &&
         !symbol.startsWith('f') &&
         !symbol.includes('TEST') &&
-        // !symbol.includes('HONGKONG') &&
-        // !symbol.includes('AUSTRALIA') &&
-        // !symbol.includes('JAPAN') &&
-        // !symbol.includes('SPAIN') &&
-        // !symbol.includes('FRANCE')
         !symbol.includes(':')
       )
     })
