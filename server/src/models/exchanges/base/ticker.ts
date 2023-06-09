@@ -1,4 +1,4 @@
-import { SymbolData } from '../types'
+import { SymbolData } from '../../../types'
 
 export class Ticker {
   public exchange: string

@@ -1,6 +1,6 @@
-export { Ticker } from './ticker.js'
-export { TradeCase } from './tradeCase.js'
-export { TriangleCase } from './triangleCase.js'
+export { Ticker } from './exchanges/base/ticker.js'
+export { TradeCase } from './exchanges/base/tradeCase.js'
+export { TriangleCase } from './exchanges/base/triangleCase.js'
 
 export { ConnectableModel } from './exchanges/base/connectableModel.js'
 export { ExchangeModel } from './exchanges/base/exchangeModel.js'

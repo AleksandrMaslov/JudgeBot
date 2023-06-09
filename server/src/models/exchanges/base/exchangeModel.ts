@@ -1,7 +1,7 @@
 import { ConnectableModel } from './connectableModel.js'
-import { Ticker } from '../../ticker.js'
-import { TradeCase } from '../../tradeCase.js'
-import { TriangleCase } from '../../triangleCase.js'
+import { Ticker } from './ticker.js'
+import { TradeCase } from './tradeCase.js'
+import { TriangleCase } from './triangleCase.js'
 
 export class ExchangeModel extends ConnectableModel {
   constructor() {

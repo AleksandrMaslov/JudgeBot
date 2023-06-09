@@ -3,7 +3,7 @@ import WebSocket from 'ws'
 import { Data, ungzip } from 'pako'
 
 import { SymbolData, TickerUpdate } from '../../../types'
-import { Ticker } from '../../ticker.js'
+import { Ticker } from './ticker.js'
 
 export class ConnectableModel {
   public tickers: any
