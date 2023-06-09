@@ -50,10 +50,8 @@ export class Controller {
   }
 
   private process(): void {
-    // this.exchanges.forEach((e) => console.log(e.getStatus()))
-    // console.log()
-
-    this.telebot.updateStatus(this.exchanges.map((e) => e.getStatus()))
+    const stats = this.exchanges.map((e) => e.getStatus())
+    this.telebot.updateStatus(stats)
 
     if (this.exchanges.length < 2) return
 
