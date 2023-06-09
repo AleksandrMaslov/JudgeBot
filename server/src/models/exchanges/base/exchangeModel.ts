@@ -26,7 +26,7 @@ export class ExchangeModel extends ConnectableModel {
       : offline
 
     const symbolsTotal = Object.keys(this.tickers).length
-    const name = this.constructor.name
+    const name = this.constructor.name.replace('Model', '')
     const updates = this.updated.toString()
 
     this.updated = 0
