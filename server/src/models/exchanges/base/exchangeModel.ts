@@ -11,7 +11,7 @@ export class ExchangeModel extends ConnectableModel {
       throw new Error("Abstract classes can't be instantiated.")
   }
 
-  public logStatus(): void {
+  public getStatus(): string {
     const online = 'Online'
     const offline = 'Offline(!)'
     const status = this.socket
@@ -22,15 +22,11 @@ export class ExchangeModel extends ConnectableModel {
 
     const symbolsTotal = Object.keys(this.tickers).length
     const name = this.constructor.name
+    const updates = this.updated.toString()
 
-    console.log(
-      `[ ${status} ] Updates:`,
-      this.updated,
-      `Symbols:`,
-      symbolsTotal,
-      ` - ${name}`
-    )
+    const statusReport = `[ ${status} ] Updates: ${updates} Symbols: ${symbolsTotal} - ${name}`
     this.updated = 0
+    return statusReport
   }
 
   public getSelfCases(): TradeCase[] {

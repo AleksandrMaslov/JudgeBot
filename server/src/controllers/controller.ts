@@ -26,20 +26,20 @@ export class Controller {
     this.telebot = new TeleBot()
 
     this.exchanges = [
-      // new BinanceModel(),
-      // new BitfinexModel(),
-      // new BybitModel(),
-      // new CoinbaseModel(),
-      // new CryptoComModel(),
-      // new ExmoModel(),
-      // new HuobiModel(),
-      // new KrakenModel(),
-      // new KucoinModel(),
-      // new MexcModel(),
-      // new OkcoinModel(),
-      // new OkxModel(),
-      // new PoloniexModel(),
-      // new TidexModel(),
+      new BinanceModel(),
+      new BitfinexModel(),
+      new BybitModel(),
+      new CoinbaseModel(),
+      new CryptoComModel(),
+      new ExmoModel(),
+      new HuobiModel(),
+      new KrakenModel(),
+      new KucoinModel(),
+      new MexcModel(),
+      new OkcoinModel(),
+      new OkxModel(),
+      new PoloniexModel(),
+      new TidexModel(),
     ]
   }
 
@@ -50,15 +50,17 @@ export class Controller {
   }
 
   private process(): void {
-    this.exchanges.forEach((e) => e.logStatus())
-    console.log()
+    // this.exchanges.forEach((e) => console.log(e.getStatus()))
+    // console.log()
+
+    this.telebot.updateStatus(this.exchanges.map((e) => e.getStatus()))
 
     if (this.exchanges.length < 2) return
 
-    const cases = this.getAllCasesWithAsset('USDT')
-    this.logCases(cases)
-    console.log()
-    console.log()
+    // const cases = this.getAllCasesWithAsset('USDT')
+    // this.logCases(cases)
+    // console.log()
+    // console.log()
   }
 
   private getAllCasesWithAsset(asset: string): TradeCase[] {

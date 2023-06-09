@@ -21,4 +21,4 @@ export { OkxModel } from './exchanges/okxModel.js'
 export { PoloniexModel } from './exchanges/poloniexModel.js'
 export { TidexModel } from './exchanges/tidexModel.js'
 
-export { TeleBot } from './telebot/telebotModel'
+export { TeleBot } from './telebot/telebotModel.js'
