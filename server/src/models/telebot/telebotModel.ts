@@ -14,8 +14,9 @@ export class TeleBot {
   private commands: BotCommand[]
   private greetingsSticker: string
 
-  private lastMessage?: Message
+  private lastCommandMessage?: Message
   private exchangeStatus: InlineKeyboardMarkup
+  private loggedMessages: Message[]
 
   constructor() {
     this.token = '6232959751:AAGyW3KyPIN2fT8cqhXoJ_eVI1bW0Nzjf_s'
@@ -33,6 +34,8 @@ export class TeleBot {
     this.exchangeStatus = {
       inline_keyboard: [[{ text: '', callback_data: '0' }]],
     }
+
+    this.loggedMessages = []
   }
 
   public updateStatus(
@@ -56,7 +59,11 @@ export class TeleBot {
     this.exchangeStatus = {
       inline_keyboard: statsWithHeaders.map((stat, i) => {
         const { status, name, symbols, updates } = stat
-        const prefix = status.includes('Online') ? `🍀` : `🪵`
+        const prefix = status.includes('STATUS')
+          ? ''
+          : status.includes('On')
+          ? `🍀 `
+          : `🪵 `
 
         return [
           { text: `${prefix}${status}`, callback_data: i.toString() },
@@ -67,7 +74,7 @@ export class TeleBot {
       }),
     }
 
-    if (!this.lastMessage) return
+    if (!this.lastCommandMessage) return
     this.updateStatusKeyboard()
   }
 
@@ -97,20 +104,28 @@ export class TeleBot {
       return
     }
 
-    console.log(text)
-
-    this.api.sendMessage(id, `Я тебя не понимаю`)
+    this.loggedMessages.push(mesage)
+    this.sendAndLog(id, `Я тебя не понимаю`)
   }
 
   private async onCommand(mesage: Message): Promise<void> {
     const { text, chat } = mesage
     const { id } = chat
 
-    this.deleteMessage(mesage)
-    this.clearLastMessage()
+    if (!text) return
 
-    if (text === '/start') {
-      this.onStartCommand(mesage)
+    if (!commands.map((c) => c.command).includes(text)) {
+      this.loggedMessages.push(mesage)
+      this.sendAndLog(id, `Я не понимаю такой команды, попробуй еще раз`)
+      return
+    }
+
+    this.deleteMessage(mesage)
+    this.deleteLastCommandMessage()
+    this.deleteLoggedMessages()
+
+    if (text === '/welcome') {
+      this.onWelcomeCommand(mesage)
       return
     }
 
@@ -123,17 +138,21 @@ export class TeleBot {
       this.onStatusCommand(mesage)
       return
     }
-
-    this.api.sendMessage(id, `Я не понимаю такой команды, попробуй еще раз`)
   }
 
-  private clearLastMessage(): void {
-    if (!this.lastMessage) return
-    this.deleteMessage(this.lastMessage)
-    this.lastMessage = undefined
+  private sendAndLog(chatId: number, mesage: string): void {
+    this.api.sendMessage(chatId, mesage).then((message) => {
+      this.loggedMessages.push(message)
+    })
   }
 
-  private onStartCommand(mesage: Message): void {
+  private deleteLastCommandMessage(): void {
+    if (!this.lastCommandMessage) return
+    this.deleteMessage(this.lastCommandMessage)
+    this.lastCommandMessage = undefined
+  }
+
+  private onWelcomeCommand(mesage: Message): void {
     const { chat, from } = mesage
     const { id } = chat
     const { username, first_name, last_name } = from!
@@ -142,16 +161,17 @@ export class TeleBot {
       last_name ? ` ${last_name}` : ''
     }${username ? `(${username})` : ''}`
 
-    this.api
-      .sendSticker(id, this.greetingsSticker)
-      .then(() => this.api.sendMessage(id, `Добро пожаловать, ${userName}`))
+    this.api.sendSticker(id, this.greetingsSticker).then((mesage) => {
+      this.loggedMessages.push(mesage)
+      this.sendAndLog(id, `Добро пожаловать, ${userName}`)
+    })
   }
 
   private async onStatusCommand(mesage: Message): Promise<void> {
     const { chat } = mesage
     const { id } = chat
 
-    this.lastMessage = await this.api.sendMessage(
+    this.lastCommandMessage = await this.api.sendMessage(
       id,
       `Exchanges Connection Status:`,
       {
@@ -165,7 +185,7 @@ export class TeleBot {
     const { chat } = mesage
     const { id } = chat
 
-    this.lastMessage = await this.api.sendMessage(id, `Trading Pairs:`, {
+    this.lastCommandMessage = await this.api.sendMessage(id, `Trading Pairs:`, {
       reply_markup: this.exchangeStatus,
       protect_content: true,
     })
@@ -184,11 +204,17 @@ export class TeleBot {
   }
 
   private updateStatusKeyboard(): void {
-    const { message_id, chat } = this.lastMessage!
+    const { message_id, chat } = this.lastCommandMessage!
     const { id } = chat
     this.api.editMessageReplyMarkup(this.exchangeStatus, {
       chat_id: id,
       message_id: message_id,
+    })
+  }
+
+  private deleteLoggedMessages(): void {
+    this.loggedMessages.forEach((message) => {
+      this.deleteMessage(message)
     })
   }
 
