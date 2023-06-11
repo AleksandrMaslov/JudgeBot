@@ -74,18 +74,20 @@ export class MexcModel extends ExchangeModel {
     this.lastRefreshTime = Date.now()
     if (!this.tickersUrl) return
 
-    await axios
-      .get(this.tickersUrl)
+    try {
+      await axios
+        .get(this.tickersUrl)
 
-      .then((response) => {
-        const rawTickersData = this.parseTickersResponse(response)
-        this.updated = rawTickersData.length
+        .then((response) => {
+          const rawTickersData = this.parseTickersResponse(response)
+          this.updated = rawTickersData.length
 
-        rawTickersData.forEach((rawTickerData: any) => {
-          const tickerData = this.parseTickerData(rawTickerData)
-          this.ensureTicker(tickerData)
-          this.updateTickerData(tickerData)
+          rawTickersData.forEach((rawTickerData: any) => {
+            const tickerData = this.parseTickerData(rawTickerData)
+            this.ensureTicker(tickerData)
+            this.updateTickerData(tickerData)
+          })
         })
-      })
+    } catch (error) {}
   }
 }
