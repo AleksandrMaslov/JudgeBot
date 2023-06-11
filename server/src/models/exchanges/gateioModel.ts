@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { ExchangeModel } from '../base/exchangeModel.js'
+import { ExchangeModel } from './base/exchangeModel.js'
 import {
   GateioTickerResponse,
   GateioTickerData,
   GateioTicker,
   TickerUpdate,
-} from '../../../types'
+} from '../../types'
 
 export class GateioModel extends ExchangeModel {
   private refreshTimer: number
