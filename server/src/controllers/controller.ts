@@ -36,7 +36,7 @@ export class Controller {
       new KrakenModel(),
       new KucoinModel(),
       new MexcModel(),
-      new OkcoinModel(),
+      // new OkcoinModel(),
       new OkxModel(),
       new PoloniexModel(),
       new TidexModel(),
