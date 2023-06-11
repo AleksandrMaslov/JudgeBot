@@ -10,6 +10,7 @@ export class OkcoinModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.okcoin.com/'
     this.tickersUrl =
       'https://www.okcoin.com/api/v5/market/tickers?instType=SPOT'
     this.wsConnectionUrl = 'wss://real.okcoin.com:8443/ws/v5/public'

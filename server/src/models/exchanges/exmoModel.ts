@@ -10,6 +10,7 @@ export class ExmoModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://exmo.me/'
     this.tickersUrl = 'https://api.exmo.com/v1.1/ticker'
     this.wsConnectionUrl = 'wss://ws-api.exmo.com:443/v1/public'
     this.tickersTopic = 'spot/order_book_snapshots:'

@@ -9,6 +9,7 @@ export class MexcModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.mexc.com/'
     this.tickersUrl = 'https://api.mexc.com/api/v3/ticker/bookTicker'
     this.wsConnectionUrl =
       'wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self'

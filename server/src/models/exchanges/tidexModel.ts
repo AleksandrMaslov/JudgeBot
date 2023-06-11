@@ -13,6 +13,7 @@ export class TidexModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://tidex.com/'
     this.tickersUrl = 'https://api.tidex.com/api/v1/public/tickers'
     this.wsConnectionUrl = 'wss://ws.tidex.com/'
     this.pingMessage = {

@@ -10,6 +10,7 @@ export class CryptoComModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://crypto.com/'
     this.tickersUrl =
       'https://api.crypto.com/exchange/v1/public/get-instruments'
     this.wsConnectionUrl = 'wss://stream.crypto.com/exchange/v1/market'

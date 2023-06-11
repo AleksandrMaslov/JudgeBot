@@ -13,6 +13,7 @@ export class KrakenModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.kraken.com/'
     this.tickersUrl = 'https://api.kraken.com/0/public/Ticker'
     this.wsConnectionUrl =
       'wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self'

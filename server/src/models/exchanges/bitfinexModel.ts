@@ -13,6 +13,7 @@ export class BitfinexModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.bitfinex.com/'
     this.tickersUrl = 'https://api-pub.bitfinex.com/v2/tickers?symbols=ALL'
     this.wsConnectionUrl =
       'wss://demo.piesocket.com/v3/channel_123?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self'

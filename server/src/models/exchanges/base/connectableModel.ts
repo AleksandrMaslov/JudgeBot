@@ -9,6 +9,7 @@ export class ConnectableModel {
   public tickers: any
   socket?: WebSocket
 
+  exchangeUrl: string
   symbolsUrl: string | undefined
   tickersUrl: string | undefined
   wsConnectionUrl: string
@@ -26,6 +27,7 @@ export class ConnectableModel {
   constructor() {
     this.tickers = {}
 
+    this.exchangeUrl = ''
     this.symbolsUrl = undefined
     this.tickersUrl = undefined
     this.wsConnectionUrl = ''

@@ -13,6 +13,7 @@ export class BinanceModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.binance.com'
     this.symbolsUrl = 'https://api.binance.com/api/v3/exchangeInfo'
     this.tickersUrl = 'https://api.binance.com/api/v3/ticker/bookTicker'
     this.wsConnectionUrl = 'wss://stream.binance.com:9443/ws'

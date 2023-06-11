@@ -5,6 +5,7 @@ export class CoinbaseModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.coinbase.com/'
     this.wsConnectionUrl = 'wss://ws-feed.exchange.coinbase.com'
     this.senderPrefix = this.constructor.name
 

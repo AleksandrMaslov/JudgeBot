@@ -10,6 +10,7 @@ export class OkxModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.okx.com/'
     this.tickersUrl = 'https://www.okx.com/api/v5/market/tickers?instType=SPOT'
     this.wsConnectionUrl = 'wss://ws.okx.com:8443/ws/v5/public'
     this.senderPrefix = this.constructor.name

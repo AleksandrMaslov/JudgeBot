@@ -19,6 +19,7 @@ export class KucoinModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.kucoin.com/'
     this.symbolsUrl = 'https://api.kucoin.com/api/v2/symbols'
     this.tickersUrl = 'https://api.kucoin.com/api/v1/market/allTickers'
     this.wsConnectionUrl = 'wss://stream.binance.com:9443/ws'

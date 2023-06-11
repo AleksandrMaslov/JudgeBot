@@ -10,6 +10,7 @@ export class PoloniexModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://poloniex.com/'
     this.tickersUrl = 'https://api.poloniex.com/markets/ticker24h'
     this.wsConnectionUrl = 'wss://ws.poloniex.com/ws/public'
     this.pingMessage = { event: 'ping' }

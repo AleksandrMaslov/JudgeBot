@@ -10,6 +10,7 @@ export class HuobiModel extends ExchangeModel {
   constructor() {
     super()
 
+    this.exchangeUrl = 'https://www.huobi.com/'
     this.tickersUrl = 'https://api.huobi.pro/market/tickers'
     this.wsConnectionUrl = 'wss://api.huobi.pro/ws'
     this.senderPrefix = this.constructor.name
