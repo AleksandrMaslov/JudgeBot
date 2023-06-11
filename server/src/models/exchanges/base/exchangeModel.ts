@@ -16,6 +16,7 @@ export class ExchangeModel extends ConnectableModel {
     name: string
     symbols: string
     updates: string
+    url: string
   } {
     const status = this.socket
       ? this.socket?.readyState === 1
@@ -33,6 +34,7 @@ export class ExchangeModel extends ConnectableModel {
       name: name,
       symbols: symbolsTotal.toString(),
       updates: updates.toString(),
+      url: this.exchangeUrl,
     }
   }
 

@@ -21,4 +21,5 @@ export const HEADER = {
   name: 'EXCHANGE',
   symbols: 'PAIRS',
   updates: 'UPDATES',
+  url: '',
 }

@@ -52,13 +52,14 @@ export class TeleBot {
       name: string
       symbols: string
       updates: string
+      url: string
     }[]
   ): void {
     const statsWithHeaders = [HEADER, ...stats]
 
     this.exchangeStatus = {
       inline_keyboard: statsWithHeaders.map((stat, i) => {
-        const { status, name, symbols, updates } = stat
+        const { status, name, symbols, updates, url } = stat
 
         if (!(typeof status === 'boolean')) {
           return [
@@ -75,7 +76,7 @@ export class TeleBot {
 
         return [
           { text: `${textStatus}`, callback_data: i.toString() },
-          { text: `${name}`, callback_data: i.toString() },
+          { text: `${name}`, url: url, callback_data: i.toString() },
           { text: `${symbols}`, callback_data: i.toString() },
           { text: `${updates}`, callback_data: i.toString() },
         ]
