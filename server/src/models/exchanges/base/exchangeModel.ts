@@ -17,8 +17,8 @@ export class ExchangeModel extends ConnectableModel {
     symbols: string
     updates: string
   } {
-    const online = 'Online'
-    const offline = 'Offline(!)'
+    const online = 'On'
+    const offline = 'Off'
     const status = this.socket
       ? this.socket?.readyState === 1
         ? online
