@@ -6,7 +6,15 @@ import TelegramApi, {
   Metadata,
 } from 'node-telegram-bot-api'
 
-import { constructorOptions, commands } from './options.js'
+import {
+  CONSTRUCTOR_OPTIONS,
+  COMMANDS,
+  HEADER,
+  ONLINE,
+  ONLINE_SYMBOL,
+  OFFLINE_SYMBOL,
+  OFFLINE,
+} from './options.js'
 
 export class TeleBot {
   private token: string
@@ -20,8 +28,8 @@ export class TeleBot {
 
   constructor() {
     this.token = '6232959751:AAGyW3KyPIN2fT8cqhXoJ_eVI1bW0Nzjf_s'
-    this.api = new TelegramApi(this.token, constructorOptions)
-    this.commands = commands
+    this.api = new TelegramApi(this.token, CONSTRUCTOR_OPTIONS)
+    this.commands = COMMANDS
 
     this.greetingsSticker =
       'https://tlgrm.ru/_/stickers/668/b21/668b2148-fa65-48ed-9a6c-e69982e919bd/3.webp'
@@ -40,33 +48,33 @@ export class TeleBot {
 
   public updateStatus(
     stats: {
-      status: string
+      status: boolean
       name: string
       symbols: string
       updates: string
     }[]
   ): void {
-    const statsWithHeaders = [
-      {
-        status: 'STATUS',
-        name: 'EXCHANGE',
-        symbols: 'PAIRS',
-        updates: 'UPDATES',
-      },
-      ...stats,
-    ]
+    const statsWithHeaders = [HEADER, ...stats]
 
     this.exchangeStatus = {
       inline_keyboard: statsWithHeaders.map((stat, i) => {
         const { status, name, symbols, updates } = stat
-        const prefix = status.includes('STATUS')
-          ? ''
-          : status.includes('On')
-          ? `🍀 `
-          : `🪵 `
+
+        if (!(typeof status === 'boolean')) {
+          return [
+            { text: `${status}`, callback_data: i.toString() },
+            { text: `${name}`, callback_data: i.toString() },
+            { text: `${symbols}`, callback_data: i.toString() },
+            { text: `${updates}`, callback_data: i.toString() },
+          ]
+        }
+
+        const textStatus = status
+          ? `${ONLINE_SYMBOL} [ ${ONLINE} ]`
+          : `${OFFLINE_SYMBOL} [ ${OFFLINE} ]`
 
         return [
-          { text: `${prefix}${status}`, callback_data: i.toString() },
+          { text: `${textStatus}`, callback_data: i.toString() },
           { text: `${name}`, callback_data: i.toString() },
           { text: `${symbols}`, callback_data: i.toString() },
           { text: `${updates}`, callback_data: i.toString() },
@@ -114,7 +122,7 @@ export class TeleBot {
 
     if (!text) return
 
-    if (!commands.map((c) => c.command).includes(text)) {
+    if (!COMMANDS.map((c) => c.command).includes(text)) {
       this.loggedMessages.push(mesage)
       this.sendAndLog(id, `Я не понимаю такой команды, попробуй еще раз`)
       return

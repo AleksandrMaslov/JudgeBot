@@ -12,18 +12,16 @@ export class ExchangeModel extends ConnectableModel {
   }
 
   public getStatus(): {
-    status: string
+    status: boolean
     name: string
     symbols: string
     updates: string
   } {
-    const online = 'On'
-    const offline = 'Off'
     const status = this.socket
       ? this.socket?.readyState === 1
-        ? online
-        : offline
-      : offline
+        ? true
+        : false
+      : false
 
     const symbolsTotal = Object.keys(this.tickers).length
     const name = this.constructor.name.replace('Model', '')
@@ -31,7 +29,7 @@ export class ExchangeModel extends ConnectableModel {
 
     this.updated = 0
     return {
-      status: `[ ${status} ]`,
+      status: status,
       name: name,
       symbols: symbolsTotal.toString(),
       updates: updates.toString(),
