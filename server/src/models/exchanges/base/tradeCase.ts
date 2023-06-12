@@ -27,6 +27,18 @@ export class TradeCase {
     this.analize()
   }
 
+  public getData() {
+    return {
+      base: this.baseAsset,
+      pair: this.pairAsset,
+      start: this.start?.exchange,
+      ens: this.end?.exchange,
+      askPrice: this.start?.askPrice,
+      bidPrice: this.end?.bidPrice,
+      proffit: this.proffit,
+    }
+  }
+
   public log(): void {
     console.log(
       `${this.baseAsset}-${this.pairAsset}: ${this.start?.exchange} / `,
