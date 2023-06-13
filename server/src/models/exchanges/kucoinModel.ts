@@ -52,6 +52,7 @@ export class KucoinModel extends ExchangeModel {
     const { symbol } = symbolData
     return {
       exchange: this.constructor.name.replace('Model', ''),
+      url: this.exchangeUrl,
       symbol: symbol,
     }
   }
@@ -129,6 +130,7 @@ export class KucoinModel extends ExchangeModel {
 
     this.ensureTicker({
       exchange: this.constructor.name.replace('Model', ''),
+      url: this.exchangeUrl,
       symbol: subject,
     })
 

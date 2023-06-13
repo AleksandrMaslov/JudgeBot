@@ -96,11 +96,20 @@ export class TeleBot {
   public updateCases(cases: TradeCase[]): void {
     this.tradeCasesData = cases.reduce((result, tradeCase) => {
       const data = tradeCase.getData()
-      const { base, pair, start, end, askPrice, bidPrice, proffit } = data
+      const {
+        base,
+        pair,
+        start,
+        startUrl,
+        end,
+        endUrl,
+        askPrice,
+        bidPrice,
+        proffit,
+      } = data
 
-      const tempLink = 'http://www.example.com/'
-      const startLink = `<a href="${tempLink}">${start}</a>`
-      const endLink = `<a href="${tempLink}">${end}</a>`
+      const startLink = `<a href="${startUrl}">${start}</a>`
+      const endLink = `<a href="${endUrl}">${end}</a>`
       const footer = `${startLink}       >>       ${endLink}\n\n`
       const caseMessage = `💸 ${proffit}%     ${base} - ${pair}\n${askPrice}$    >>    ${bidPrice}$\n${footer}`
       return result + caseMessage
@@ -128,10 +137,13 @@ export class TeleBot {
 
   private async onMessage(mesage: Message, metadata: Metadata): Promise<void> {
     const { type } = metadata
-    const { text, chat } = mesage
+    const { text, chat, from } = mesage
     const { id } = chat
+    const { username } = from!
 
     if (type !== 'text') return
+
+    console.log(`${username}: ${text}`)
 
     if (text?.startsWith('/')) {
       this.onCommand(mesage)
@@ -204,6 +216,7 @@ export class TeleBot {
       await this.api.sendMessage(id, this.tradeCasesData, {
         protect_content: true,
         parse_mode: 'HTML',
+        disable_web_page_preview: true,
       })
     )
   }
@@ -231,6 +244,7 @@ export class TeleBot {
         chat_id: id,
         message_id: message_id,
         parse_mode: 'HTML',
+        disable_web_page_preview: true,
       })
     })
   }

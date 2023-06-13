@@ -210,6 +210,7 @@ export class ConnectableModel {
     if (this.tickers[symbol]) return
     this.tickers[symbol] = new Ticker({
       exchange: this.constructor.name.replace('Model', ''),
+      url: this.exchangeUrl,
       symbol: symbol,
     })
   }

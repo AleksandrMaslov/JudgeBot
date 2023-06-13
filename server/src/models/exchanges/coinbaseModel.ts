@@ -60,6 +60,7 @@ export class CoinbaseModel extends ExchangeModel {
 
     this.ensureTicker({
       exchange: this.constructor.name.replace('Model', ''),
+      url: this.exchangeUrl,
       symbol: product_id,
     })
 
@@ -89,6 +90,7 @@ export class CoinbaseModel extends ExchangeModel {
       const { id } = p
       this.ensureTicker({
         exchange: this.constructor.name.replace('Model', ''),
+        url: this.exchangeUrl,
         symbol: id,
       })
     })

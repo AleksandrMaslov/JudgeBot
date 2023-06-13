@@ -99,6 +99,7 @@ export class TidexModel extends ExchangeModel {
 
     this.ensureTicker({
       exchange: this.constructor.name.replace('Model', ''),
+      url: this.exchangeUrl,
       symbol: symbol,
     })
 

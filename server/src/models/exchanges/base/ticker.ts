@@ -2,6 +2,7 @@ import { SymbolData } from '../../../types'
 
 export class Ticker {
   public exchange: string
+  public url: string
   public symbol: string
   public askPrice: number | undefined
   public askQty: number | undefined
@@ -9,9 +10,10 @@ export class Ticker {
   public bidQty: number | undefined
 
   constructor(symbolData: SymbolData) {
-    const { exchange, symbol } = symbolData
+    const { exchange, url, symbol } = symbolData
 
     this.exchange = exchange
+    this.url = url
     this.symbol = symbol
 
     this.askPrice = undefined

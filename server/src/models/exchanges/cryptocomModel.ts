@@ -104,6 +104,7 @@ export class CryptoComModel extends ExchangeModel {
 
     this.ensureTicker({
       exchange: this.constructor.name.replace('Model', ''),
+      url: this.exchangeUrl,
       symbol: instrument_name,
     })
 
