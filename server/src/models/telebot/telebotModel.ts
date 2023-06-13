@@ -2,7 +2,6 @@ import { TradeCase } from '../exchanges/base/tradeCase.js'
 
 import TelegramApi, {
   BotCommand,
-  CallbackQuery,
   InlineKeyboardMarkup,
   Message,
   Metadata,
