@@ -103,7 +103,7 @@ export class TeleBot {
       const startLink = `<a href="${tempLink}">${start}</a>`
       const endLink = `<a href="${tempLink}">${end}</a>`
       const footer = `${startLink}       >>       ${endLink}\n\n`
-      const caseMessage = `💸 ${proffit}%     ${base}-${pair}\n${askPrice}$    >>    ${bidPrice}$\n${footer}`
+      const caseMessage = `💸 ${proffit}%     ${base} - ${pair}\n${askPrice}$    >>    ${bidPrice}$\n${footer}`
       return result + caseMessage
     }, '')
 
