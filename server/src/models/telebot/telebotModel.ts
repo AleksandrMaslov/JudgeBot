@@ -1,3 +1,5 @@
+import { TradeCase } from '../exchanges/base/tradeCase.js'
+
 import TelegramApi, {
   BotCommand,
   CallbackQuery,
@@ -22,9 +24,11 @@ export class TeleBot {
   private commands: BotCommand[]
   private greetingsSticker: string
 
-  private lastCommandMessage?: Message
+  private statusMessages: Message[]
+  private caseMessages: Message[]
+
   private exchangeStatus: InlineKeyboardMarkup
-  private loggedMessages: Message[]
+  private tradeCasesData: string
 
   constructor() {
     this.token = '6232959751:AAGyW3KyPIN2fT8cqhXoJ_eVI1bW0Nzjf_s'
@@ -43,7 +47,10 @@ export class TeleBot {
       inline_keyboard: [[{ text: '', callback_data: '0' }]],
     }
 
-    this.loggedMessages = []
+    this.tradeCasesData = ''
+
+    this.statusMessages = []
+    this.caseMessages = []
   }
 
   public updateStatus(
@@ -64,9 +71,9 @@ export class TeleBot {
         if (!(typeof status === 'boolean')) {
           return [
             { text: `${status}`, callback_data: i.toString() },
-            { text: `${name}`, callback_data: i.toString() },
             { text: `${symbols}`, callback_data: i.toString() },
             { text: `${updates}`, callback_data: i.toString() },
+            { text: `${name}`, callback_data: i.toString() },
           ]
         }
 
@@ -76,15 +83,38 @@ export class TeleBot {
 
         return [
           { text: `${textStatus}`, callback_data: i.toString() },
-          { text: `${name}`, url: url, callback_data: i.toString() },
           { text: `${symbols}`, callback_data: i.toString() },
           { text: `${updates}`, callback_data: i.toString() },
+          { text: `${name}`, url: url, callback_data: i.toString() },
         ]
       }),
     }
 
-    if (!this.lastCommandMessage) return
+    if (!this.statusMessages) return
     this.updateStatusKeyboard()
+  }
+
+  public updateCases(cases: TradeCase[]): void {
+    this.tradeCasesData = cases.reduce((result, tradeCase) => {
+      const data = tradeCase.getData()
+      const { base, pair, start, end, askPrice, bidPrice, proffit } = data
+
+      const tempLink = 'http://www.example.com/'
+      const startLink = `<a href="${tempLink}">${start}</a>`
+      const endLink = `<a href="${tempLink}">${end}</a>`
+      const footer = `${startLink}       >>       ${endLink}\n\n`
+      const caseMessage = `💸 ${proffit}%     ${base}-${pair}\n${askPrice}$    >>    ${bidPrice}$\n${footer}`
+      return result + caseMessage
+    }, '')
+
+    if (!this.caseMessages) return
+    if (this.tradeCasesData.length === 0) return
+
+    try {
+      this.updateCasesData()
+    } catch (error) {
+      console.log('CASES MESSAGE - TOO LONG')
+    }
   }
 
   private defineCommands(): void {
@@ -95,10 +125,6 @@ export class TeleBot {
     this.api.on('message', async (message, metadata) => {
       this.onMessage(message, metadata)
     })
-
-    this.api.on('callback_query', async (callbackQuery) =>
-      this.onCallbackQuery(callbackQuery)
-    )
   }
 
   private async onMessage(mesage: Message, metadata: Metadata): Promise<void> {
@@ -113,8 +139,7 @@ export class TeleBot {
       return
     }
 
-    this.loggedMessages.push(mesage)
-    this.sendAndLog(id, `Я тебя не понимаю`)
+    this.api.sendMessage(id, `Я тебя не понимаю`)
   }
 
   private async onCommand(mesage: Message): Promise<void> {
@@ -124,14 +149,9 @@ export class TeleBot {
     if (!text) return
 
     if (!COMMANDS.map((c) => c.command).includes(text)) {
-      this.loggedMessages.push(mesage)
-      this.sendAndLog(id, `Я не понимаю такой команды, попробуй еще раз`)
+      this.api.sendMessage(id, `Я не понимаю такой команды, попробуй еще раз`)
       return
     }
-
-    this.deleteMessage(mesage)
-    this.deleteLastCommandMessage()
-    this.deleteLoggedMessages()
 
     if (text === '/welcome') {
       this.onWelcomeCommand(mesage)
@@ -149,18 +169,6 @@ export class TeleBot {
     }
   }
 
-  private sendAndLog(chatId: number, mesage: string): void {
-    this.api.sendMessage(chatId, mesage).then((message) => {
-      this.loggedMessages.push(message)
-    })
-  }
-
-  private deleteLastCommandMessage(): void {
-    if (!this.lastCommandMessage) return
-    this.deleteMessage(this.lastCommandMessage)
-    this.lastCommandMessage = undefined
-  }
-
   private onWelcomeCommand(mesage: Message): void {
     const { chat, from } = mesage
     const { id } = chat
@@ -170,9 +178,8 @@ export class TeleBot {
       last_name ? ` ${last_name}` : ''
     }${username ? `(${username})` : ''}`
 
-    this.api.sendSticker(id, this.greetingsSticker).then((mesage) => {
-      this.loggedMessages.push(mesage)
-      this.sendAndLog(id, `Добро пожаловать, ${userName}`)
+    this.api.sendSticker(id, this.greetingsSticker).then(() => {
+      this.api.sendMessage(id, `Добро пожаловать, ${userName}`)
     })
   }
 
@@ -180,50 +187,52 @@ export class TeleBot {
     const { chat } = mesage
     const { id } = chat
 
-    this.lastCommandMessage = await this.api.sendMessage(
-      id,
-      `Exchanges Connection Status:`,
-      {
+    this.statusMessages.push(
+      await this.api.sendMessage(id, `Exchanges Connection Status:`, {
         reply_markup: this.exchangeStatus,
         protect_content: true,
-      }
+      })
     )
   }
 
   private async onTradeCommand(mesage: Message): Promise<void> {
+    if (this.tradeCasesData.length === 0) return
+
     const { chat } = mesage
     const { id } = chat
 
-    this.lastCommandMessage = await this.api.sendMessage(id, `Trading Pairs:`, {
-      reply_markup: this.exchangeStatus,
-      protect_content: true,
-    })
-  }
-
-  private async onCallbackQuery(callbackQuery: CallbackQuery): Promise<void> {
-    const { message } = callbackQuery
-    const { message_id, text, reply_markup, chat } = message!
-    const { id } = chat
-
-    // this.api.editMessageText('TEST TEXT', {
-    //   chat_id: id,
-    //   message_id: message_id,
-    //   reply_markup: keyboard,
-    // })
+    this.caseMessages.push(
+      await this.api.sendMessage(id, this.tradeCasesData, {
+        protect_content: true,
+        parse_mode: 'HTML',
+      })
+    )
   }
 
   private updateStatusKeyboard(): void {
-    const { message_id, chat } = this.lastCommandMessage!
-    const { id } = chat
-    this.api.editMessageReplyMarkup(this.exchangeStatus, {
-      chat_id: id,
-      message_id: message_id,
+    this.statusMessages.forEach((message) => {
+      const { message_id, chat } = message
+      const { id } = chat
+
+      this.api.editMessageReplyMarkup(this.exchangeStatus, {
+        chat_id: id,
+        message_id: message_id,
+      })
     })
   }
 
-  private deleteLoggedMessages(): void {
-    this.loggedMessages.forEach((message) => {
-      this.deleteMessage(message)
+  private updateCasesData(): void {
+    this.caseMessages.forEach((message) => {
+      const { text, message_id, chat } = message
+      const { id } = chat
+
+      if (text === this.tradeCasesData) return
+
+      this.api.editMessageText(this.tradeCasesData, {
+        chat_id: id,
+        message_id: message_id,
+        parse_mode: 'HTML',
+      })
     })
   }
 
