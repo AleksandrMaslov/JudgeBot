@@ -17,6 +17,7 @@ import {
   KrakenModel,
   TeleBot,
 } from '../models/index.js'
+import { blackList } from './blackList.js'
 
 export class Controller {
   private telebot: TeleBot
@@ -83,8 +84,26 @@ export class Controller {
     const j = 20
 
     return cases
-      .filter((c) => c.proffit! > 10 && c.proffit! < 50)
+      .filter((c) => c.proffit! > 20 && c.proffit! < 50)
+      .filter((c) => this.isActive(c))
       .sort((a, b) => a.proffit! - b.proffit!)
       .splice(i, j)
+  }
+
+  private isActive(tradeCase: TradeCase): boolean {
+    const data = tradeCase.getData()
+    const { base, pair, start, end } = data
+    const caseSymbol = `${base}-${pair}`
+
+    if (!Object.hasOwn(blackList, caseSymbol)) return true
+
+    const exchanges = Object.entries(blackList).filter(
+      (pair) => pair[0] === caseSymbol
+    )[0][1]
+
+    if (exchanges.includes(start!)) return false
+    if (exchanges.includes(end!)) return false
+
+    return true
   }
 }
