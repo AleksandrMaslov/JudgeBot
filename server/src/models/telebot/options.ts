@@ -6,7 +6,7 @@ export const CONSTRUCTOR_OPTIONS: ConstructorOptions = {
 
 export const COMMANDS: BotCommand[] = [
   { command: '/welcome', description: 'Приветствие' },
-  { command: '/status', description: 'Текущее состояние бирж' },
+  { command: '/status', description: 'Текущее состояние соединений' },
   { command: '/trade', description: 'Заняться делом' },
 ]
 
