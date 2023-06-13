@@ -63,7 +63,7 @@ export class Controller {
 
   private getAllCasesWithAsset(asset: string): TradeCase[] {
     let cases: TradeCase[] = []
-    let list = Array.from(this.exchanges)
+    let list = Array.from(this.exchanges).filter((e) => e.getStatus().status)
 
     while (list.length > 1) {
       const baseExchange = list.pop()
