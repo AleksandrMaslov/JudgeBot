@@ -56,9 +56,9 @@ export class Controller {
     if (this.exchanges.length < 2) return
 
     const cases = this.getAllCasesWithAsset('USDT')
-    this.logCases(cases)
-    console.log()
-    console.log()
+    const validCases = this.filterCases(cases)
+
+    this.telebot.updateCases(validCases)
   }
 
   private getAllCasesWithAsset(asset: string): TradeCase[] {
@@ -78,10 +78,13 @@ export class Controller {
     return cases
   }
 
-  private logCases(cases: TradeCase[]): void {
-    cases
-      .filter((c) => c.proffit! > 5 && c.proffit! < 30)
-      .sort((a, b) => b.proffit! - a.proffit!)
-      .forEach((c) => c.log())
+  private filterCases(cases: TradeCase[]): TradeCase[] {
+    const i = 0
+    const j = 20
+
+    return cases
+      .filter((c) => c.proffit! > 5 && c.proffit! < 20)
+      .sort((a, b) => a.proffit! - b.proffit!)
+      .splice(i, j)
   }
 }

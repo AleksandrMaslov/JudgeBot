@@ -32,7 +32,7 @@ export class TradeCase {
       base: this.baseAsset,
       pair: this.pairAsset,
       start: this.start?.exchange,
-      ens: this.end?.exchange,
+      end: this.end?.exchange,
       askPrice: this.start?.askPrice,
       bidPrice: this.end?.bidPrice,
       proffit: this.proffit,
