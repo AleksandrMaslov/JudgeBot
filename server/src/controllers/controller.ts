@@ -83,7 +83,7 @@ export class Controller {
     const j = 20
 
     return cases
-      .filter((c) => c.proffit! > 5 && c.proffit! < 20)
+      .filter((c) => c.proffit! > 10 && c.proffit! < 50)
       .sort((a, b) => a.proffit! - b.proffit!)
       .splice(i, j)
   }
