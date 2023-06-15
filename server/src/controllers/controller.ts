@@ -40,7 +40,7 @@ export class Controller {
       new MexcModel(),
       // new OkcoinModel(),
       new OkxModel(),
-      new PoloniexModel(),
+      // new PoloniexModel(),
       new TidexModel(),
     ]
   }
@@ -85,7 +85,7 @@ export class Controller {
     const j = 20
 
     return cases
-      .filter((c) => c.proffit! > 20 && c.proffit! < 50)
+      .filter((c) => c.proffit! > 5 && c.proffit! < 100)
       .filter((c) => this.isNotBlackListed(c))
       .filter((c) => this.isNetworkCompatible(c))
       .sort((a, b) => a.proffit! - b.proffit!)
