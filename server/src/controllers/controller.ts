@@ -18,6 +18,7 @@ import {
   TeleBot,
 } from '../models/index.js'
 import { blackList } from './blackList.js'
+import { networks } from './networks.js'
 
 export class Controller {
   private telebot: TeleBot
@@ -85,25 +86,48 @@ export class Controller {
 
     return cases
       .filter((c) => c.proffit! > 20 && c.proffit! < 50)
-      .filter((c) => this.isActive(c))
+      .filter((c) => this.isNotBlackListed(c))
+      .filter((c) => this.isNetworkCompatible(c))
       .sort((a, b) => a.proffit! - b.proffit!)
       .splice(i, j)
   }
 
-  private isActive(tradeCase: TradeCase): boolean {
+  private isNotBlackListed(tradeCase: TradeCase): boolean {
     const data = tradeCase.getData()
     const { base, pair, start, end } = data
     const caseSymbol = `${base}-${pair}`
 
-    if (!Object.hasOwn(blackList, caseSymbol)) return true
+    if (!blackList[caseSymbol]) return true
 
-    const exchanges = Object.entries(blackList).filter(
-      (pair) => pair[0] === caseSymbol
-    )[0][1]
-
+    const exchanges = blackList[caseSymbol]
     if (exchanges.includes(start!)) return false
     if (exchanges.includes(end!)) return false
 
     return true
+  }
+
+  private isNetworkCompatible(tradeCase: TradeCase): boolean {
+    const data = tradeCase.getData()
+    const { pair, start, end } = data
+
+    if (!networks[pair]) return true
+
+    const networksCompatibility = networks[pair]
+    if (!networksCompatibility[start!]) return true
+    if (!networksCompatibility[end!]) return true
+
+    const startNetworks = networksCompatibility[start!]
+    const endNetworks = networksCompatibility[end!]
+    const availableNetworks = [
+      ...Object.keys(startNetworks),
+      ...Object.keys(endNetworks),
+    ]
+    const duplicates = availableNetworks.filter(
+      (item, index) => availableNetworks.indexOf(item) !== index
+    )
+
+    if (duplicates.length > 0) return true
+
+    return false
   }
 }

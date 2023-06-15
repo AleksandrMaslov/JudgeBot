@@ -1,3 +1,3 @@
-export const blackList = {
-  'USDT-GMEE': ['Poloniex'],
+export const blackList: any = {
+  'USDT-BADGER': ['Kucoin'],
 }
